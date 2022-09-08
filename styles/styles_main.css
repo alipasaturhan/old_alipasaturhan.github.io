@@ -28,9 +28,9 @@ body{
 }
 
 .left{
-	padding: 65px;
+	padding-top: 65px;
 	float: left;
-	width: 15%;
+	width: 25%;
 }
 
 .right{
@@ -43,7 +43,7 @@ body{
 }
 
 .profile_image{
-	width: 100%;
+	width: 50%;
 	border-radius: 100%;
 	border-color: white;
 	border-width: 2px;
