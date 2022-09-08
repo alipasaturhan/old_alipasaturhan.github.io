@@ -1,0 +1,91 @@
+@font-face {
+	font-family: Playground-family; src: url('..\\fonts\\karma1.otf');
+}
+
+@font-face {
+	font-family: Terminal-family; src: url('..\\fonts\\terminal.ttf');
+}
+
+@font-face {
+	font-family: Digital-family; src: url('..\\fonts\\digital1.ttf');
+}
+
+body{
+	background-color: #101010;
+
+}
+
+.top{
+	font-family: Playground-family;
+	color: white;
+	font-size: 50;
+	margin: auto;
+	padding-top: 40;
+	padding-bottom: 40;
+	text-align: center;
+	border-color: #00BB00;
+	/*border-bottom-style: solid;*/
+	border-width: 2px;
+}
+
+.left{
+	padding: 65px;
+	float: left;
+	width: 15%;
+}
+
+.right{
+	padding-top: 20px;
+	padding-right: 70px;
+	width: 70%;
+	float: right;
+	color: white;
+	font-family: Terminal-family;
+}
+
+.profile_image{
+	width: 100%;
+	border-radius: 100%;
+	border-color: white;
+	border-width: 2px;
+	border-style: solid;
+}
+
+.about_author1, .about_author2{
+	font-family: Terminal-family;
+	font-size: 20;
+	color: white;
+}
+
+.about_author2{
+	font-size: 15;
+}
+
+.topic{
+	margin-bottom: 50px;
+	border-left-color: gray;
+	border-left-style: solid;
+	border-left-width: 2px;
+	padding-left: 15px;
+}
+
+.topicsubject{
+	color: #CCCCCC;
+	font-weight: bold;
+}
+
+.topiclink:hover{
+	text-shadow: rgb(255, 255, 255) 0px 0px 15px;
+}
+
+.post_date{
+	font-family: Digital-family;
+	font-size: 25px;
+	float: right;
+	color: #CCCCCC;
+}
+
+a {
+	color: inherit;
+  	text-decoration: none;
+}
