@@ -15,6 +15,7 @@ body{
 }
 
 .top{
+	width: 100%;
 	font-family: Playground-family;
 	color: white;
 	font-size: 50;
@@ -23,8 +24,29 @@ body{
 	padding-bottom: 40;
 	text-align: center;
 	border-color: #00BB00;
-	/*border-bottom-style: solid;*/
 	border-width: 2px;
+}
+
+.secondtop{
+	color: white;
+	font-family: Terminal-family;
+	width: 100%;
+	display: flex;
+	padding-bottom: 3%;
+	padding-top: 1%;
+}
+
+.concepts{
+	width: 20%;
+	margin: auto;
+	text-align: center;
+	border-right-color: white;
+	border-right-style: solid;
+	border-right-width: 2px;
+}
+
+.concepts:hover{
+	text-shadow: rgb(255, 255, 255) 0px 0px 15px;
 }
 
 .left{
