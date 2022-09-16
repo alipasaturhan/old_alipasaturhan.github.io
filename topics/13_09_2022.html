@@ -1,0 +1,119 @@
+<html>
+	<head>
+		<title>Win32 API'lere Dalış</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="..\styles\styles_topics.css">
+		<style>
+			.node {
+			  cursor: pointer;
+			}
+
+			.node circle {
+			  fill: #fff;
+			  stroke: steelblue;
+			  stroke-width: 1.5px;
+			}
+
+			.node text {
+			  font: 10px sans-serif;
+			}
+
+			.link {
+			  fill: none;
+			  stroke: #ccc;
+			  stroke-width: 1.5px;
+			}
+		</style>
+	</head>
+	<body style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('..\\images\\13_09_2022\\bg.JPG'); background-position: 0% 0%;">
+		<br><br><br><br><br>
+		<center>
+		<div class="topic_subject" name="topic_subject">
+			Win32 API'lere Dalış
+		</div></center>
+		<br><br><br>
+		<div style="margin-top: 55px;height:2px;width:100%; background-color:white" class="hr" name="hr"></div>
+			<div style="background-color: #101010; padding: 10px">
+					<div class="topic_content" name="topic_content">
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Win32 API
+						</p>
+						<p align="justify">
+							Geliştirilen uygulamaların işletim sistemi ile iletişimini sağlar. 32 ve 64 bit Windows işletim sistemleri için özellikle C ve C++ programlama dillerinde kullanılan uygulama geliştirme arayüzüdür.
+						</p>
+						<p align="justify">
+							Bir diğer tanımı ise geliştirilen uygulamalar ile Windows API kullanıldığında Windows işletim sistemi içinde .dll dosyalarda yerleşik olarak bulunan fonksiyon veri ve yapıların uygulama içinde kullanılmasını sağlar.
+						</p>
+						<p align="justify">
+							Sistem fonksiyonları olarak adlandırılan Windows API fonksiyonları Windows işletim sistemi ile birlikte yüklenir ve Windows sistem klasörleri altındaki .dll uzantılı dosyalarda yer alırlar. Geliştirilecek uygulamaların başına eklenen <windows.h> başlık dosyası ile birlikte uygulamalara dahil edilerek kullanılırlar.
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Windows DLL Dosyaları
+						</p>
+						<p align="justify">
+							Windows API tarafından sağlanan fonksiyonlar, windows klasörü altında system32 (ve 64 bit için syswow64) klasörü altındaki dll dosyalarında bulunur. Bu dll dosyaları ise fonksiyonları barındıran başlıklardan oluşur. Kısaca şöyle bir gösterim doğru olabilir:
+							<img width="50%" src="..\images\13_09_2022\02.PNG">
+						</p>
+						<p align="justify">
+							Tüm api header'lara ulaşmak için: <a href="https://docs.microsoft.com/en-us/windows/win32/api/">docs.microsoft.com/en-us/windows/win32/api/</a>						</p>
+						<p align="justify">
+							sekiz kategoride gruplandırılabilir:
+						</p>
+						<p align="justify">
+							<li>Temel Hizmetler: Windows sistemde mevcut olan kaynaklara erişimi sağlar. Bu erişimi ise X:\\windows\system32\ klasörü altındaki dll dosyalarından sağlarız.</li>
+							<li>Heap (.heap): </li>
+							<li>Data:</li>
+								<li style="padding-left:4%;">Uninitialized data (.bss): </li>
+								<li style="padding-left:4%;">Initialized data (.data): </li>
+							<li>Text (.text): Program komutlarının bulunduğu segmenttir.</li>
+						</p>
+						<p align="justify">
+							Windows API dosyalarının temelini kernel32.dll, user32.dll ve gdi32.dll dosyaları oluşturur.
+						</p>
+
+
+
+
+
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							windows.h
+						</p>
+						<p align="justify">
+							Windows API'sindeki tüm işlevler, Windows programcıları tarafından kullanılan tüm ortak makrolar ve çeşitli işlevler tarafından kullanılan tüm veri türleri için bildirimler içeren C ve C ++ programlama dilleri için Windows'a özgü bir başlık dosyasıdır. Geliştirilecek uygulamaların başına eklenen &lt;windows.h&gt; başlık dosyası ile birlikte uygulamalara dahil edilerek kullanılırlar.
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							KERNEL32.dll
+						</p>
+						<p align="justify">
+
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							processthreadsapi.h
+						</p>
+							<li>CreateProcessA</li>
+						    <li>CreateProcessW</li>
+							<li>CreateProcessAsUserA</li>
+							<li>CreateProcessAsUserW</li>
+							<li>CreateThread</li>
+							<li>ExitProcess</li>
+						    <li>ExitThread</li>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							winbase.h
+						</p>
+							<li>CreateProcessWithLogonW</li>
+							<li>CreateProcessWithTokenW</li>
+						<p align="justify">
+							<img src="..\images\13_09_2022\01.PNG">
+						</p>
+					</div>
+			</div>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-HG8JQ59PYY"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-HG8JQ59PYY');
+	</script>
+	</body>
+</html>

@@ -6,9 +6,8 @@
 	font-family: Terminal-family; src: url('..\\fonts\\terminal.ttf');
 }
 
-body{
+body {
 	background-color: #101010;
-	background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("..\\topics\\08_09_2022\\images\\bg.PNG");
 	line-height: 1.65;
 	background-repeat: no-repeat;
 	background-position: center top;
