@@ -15,7 +15,7 @@
 			<div style="background-color: #101010; padding: 10px">
 					<div class="topic_content" name="topic_content">
 						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
-							Bir Process'in RAM'deki Görüntüsü
+							Bir Process'in Bellekteki Görüntüsü
 						</p>
 						<p align="justify">
 							Diskteki bir yürütülebilir program dosyası belleğe yüklendiğinde bir süreç haline gelir.
@@ -80,11 +80,12 @@
 						<p align="justify">
 							Bu adlar işletim sistemlerine göre değişiklik gösterebilir Fakat tüm işletim sistemlerinde genel olarak process durum yapısı bu şekildedir.
 						</p>
+						<!--
 						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
 							Process Control Block (PCB)
 						</p>
 						<p align="justify">
-							Each process is represented in the operating system by a process control block (PCB)—also called a task control block. A PCB is shown in Figure 3.3. It contains many pieces of information associated with a specific process, including these:
+							Her process bir PCB ile temsil edilir. PCB aynı zamanda <q>Task Control Block</q> olarak da adlandırılır. Aşağıda PCB bloğunu üyelerini görebilirsiniz:
 						</p>
 						<p align="justify">
 							<img src="..\images\08_09_2022\04.PNG">
@@ -101,12 +102,14 @@
 						<p align="justify">
 							In brief, the PCB simply serves as the repository for all the data needed to start, or restart, a process, along with some accounting data.
 						</p>
+
 						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
 							Threads
 						</p>
 						<p align="justify">
 							The process model discussed so far has implied that a process is a program that performs a single thread of execution. For example, when a process is running a word-processor program, a single thread of instructions is being executed. This single thread of control allows the process to perform only one task at a time. Thus, the user cannot simultaneously type in characters and run the spell checker. Most modern operating systems have extended the process concept to allow a process to have multiple threads of execution and thus to perform more than one task at a time. This feature is especially beneficial on multicore systems, where multiple threads can run in parallel. A multithreaded word processor could, for example, assign one thread to manage user input while another thread runs the spell checker. On systems that support threads, the PCB is expanded to include information for each thread. Other changes throughout the system are also needed to support threads. Chapter 4 explores threads in detail.
 						</p>
+						-->
 					</div>
 			</div>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-HG8JQ59PYY"></script>
