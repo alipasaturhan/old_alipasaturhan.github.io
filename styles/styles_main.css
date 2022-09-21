@@ -110,3 +110,5 @@ a {
 	color: inherit;
   	text-decoration: none;
 }
+
+* {cursor: url("..\\images\\cur.cur"), url("..\\images\\cur.cur"), auto;}
