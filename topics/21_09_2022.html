@@ -47,7 +47,7 @@
 							PE formatını destekleyen herhangi bir dosyayı <q>PE View</q> Programı ile analiz ettiğimizde:
 						</p>
 						<p align="justify">
-							<img src="..\images\21_09_2022\01.png">
+							<img class="other_img" name="other_img" src="..\images\21_09_2022\01.png">
 						</p>
 						<p align="justify">
 							PE formatını tree view olarak görebilirsiniz.
@@ -90,7 +90,7 @@
 							PE View programı tarafından parse edilip düzenli bir şekilde gösterilen DOS Header:
 						</p>
 						<p align="justify">
-							<img style="width:75%" src="..\images\21_09_2022\02.png">
+							<img class="other_img" name="other_img" style="width:75%" src="..\images\21_09_2022\02.png">
 						</p>
 						<p align="justify">
 							Üyelerin en sonuncusuna baktığınızda e_lfanew boyutu DWORD (4 BYTE) kadar veri alabilir. Bu üyeye DOS Stub bitişinden hemen sonraki adres yerleştirilecek -> 0x000000F8. İlerleyen konularda buraya tekrar geleceğiz.
@@ -99,9 +99,80 @@
 							Aşağıda PE dosyası DOS başlığının binary halini byte-byte görüyorsunuz:
 						</p>
 						<p align="justify">
-							<img style="width:75%" src="..\images\21_09_2022\03.png">
+							<img class="other_img" name="other_img" style="width:75%" src="..\images\21_09_2022\03.png">
 						</p>
-						
+						<!--<p align="justify">
+							Aşağıda Windows işletim sistemi için önemli olabilecek DOS başlığına ait üyeler tanıtılmıştır:
+						</p>
+						<p align="justify">
+							<li></li>
+						</p>-->
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							DOS Stub
+						</p>
+						<p align="justify">
+							Eğer bu dosya DOS sisteminde çalıştırılırsa, çalıştırılamayacağını belirtip kapanıyor (DOS Stub'ta verilen mesajı bastırır). Yani bu yapı sadece MS-DOS'un Loader'ı için önemlidir.
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Rich Header
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							NT Header
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							File Header
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Optional Header
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Data Directory
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Windows API CALL FLOW
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Section Headers
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Sections
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							PE Dosyasının Adım Adım Belleğe Yüklenmesi
+						</p>
+						<p align="justify">
+							...
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							PE Dosyası Memory ve Diskteki Hali
+						</p>
+						<p align="justify">
+							...
+						</p>
 					</div>
 			</div>
 	<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HG8JQ59PYY"></script>
