@@ -1,0 +1,123 @@
+<html>
+	<head>
+		<title>A'dan Z'ye Win32 Process Yapısı [0x01]</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="..\styles\styles_topics.css">
+	</head>
+	<body style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('..\\images\\25_09_2022\\bg.jpg');">
+		<br><br><br><br><br>
+		<center>
+		<div class="topic_subject" name="topic_subject">
+			A'dan Z'ye Win32 Process Yapısı [0x01]
+		</div></center>
+		<br><br><br>
+		<div style="margin-top: 55px;height:2px;width:100%; background-color:white" class="hr" name="hr"></div>
+			<div style="background-color: #101010; padding: 10px">
+					<div class="topic_content" name="topic_content">
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Yeni Process Oluşumu
+						</p>
+						<p align="justify">
+							Windows sistemlerde process oluşumunu sağlayan Windows API fonksiyonları vardır. Bunlardan en basit örneği <code class="p_code" name="p_code">CreateProcess</code> ve <code class="p_code" name="p_code">CreateProcessAsUser</code> fonksiyonudur.
+							Diğer process oluşturma fonksiyonları; <code class="p_code" name="p_code">CreateProcessWithTokenW</code> ve <code class="p_code" name="p_code">CreateProcessWithLogonW</code> örnek verilebilir.
+						</p>
+						<p align="justify">
+							Aşağıda yer alan şemadaki ilk iki küme Windows API fonksiyonlarıdır.
+						</p>
+						<p align="justify">
+							<img class="other_img" name="other_img" style="width:75%" src="..\images\25_09_2022\03.png">
+						</p>
+						<p align="justify">
+							Process oluşumuna örnek vermek gerekirse;<br>
+							CreateProcessWithLogonW ve CreateProcessWithTokenW fonksiyonları çağırıldıklarında, <code class="p_code" name="p_code">svchost.exe</code> içerisinden ikinci oturum açma servisine (logon service: <code class="p_code" name="p_code">seclogon.dll</code>) RPC (Remote Procedure Call) yaparlar. <code class="p_code" name="p_code">seclogon.dll</code> gelen bu çağrıyı kendi
+							içerisindeki <code class="p_code" name="p_code">SlrCreateProcessWithLogon</code> fonksiyonu ile yürütür. Her şey yolunda giderse CreateProcessAsUser'ı çağırır.
+							secLogon varsayılan olarak manuel başlayacak şekilde yapılandırılır. Bu yüzden CreateProcessWithLogonW ve CreateProcessWithTokenW fonksiyonları ilk kez çağrıldıklarında secLogon başlar.
+						</p>
+						<p align="justify">
+							<img class="other_img" name="other_img" style="width:75%" src="..\images\25_09_2022\01.png">
+						</p>
+						<p align="justify">
+						Sonuç olarak tüm bu program akışı ve fonksiyonlar ortak bir fonksiyonda buluşurlar; <code class="p_code" name="p_code">CreateProcessInternal</code> fonksiyonunda. Bu fonksiyon user modunda process'in oluşumunun asıl başlangıcıdır. Bu fonksiyon call edildiğinde kernel moda geçiş yapmak için <code class="p_code" name="p_code">ntdll.dll</code> içerisindeki <code class="p_code" name="p_code">NtCreateUserProcess</code> fonksiyonunu çağırır. Aşağıda bu olayı daha iyi anlatan bir şema görebilirsiniz.
+						</p>
+						<p align="justify">
+							<img class="other_img" name="other_img" style="width:75%" src="..\images\25_09_2022\02.jpeg">
+						</p>
+						<p align="justify">
+							User modundan oluşturulan bir process her zaman içinde bir thread ile oluşturulur. Bu thread, process'in ana işlevini yerine getirir.
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Fonksiyon Ailesi: CreateProcess
+						</p>
+						<p align="justify">
+							<li>CreateProcess</li>
+							<li style="padding-left:4%;">CreateProcessA</li>
+							<li style="padding-left:4%;">CreateProcessW</li>
+							<li>CreateProcessAsUser</li>
+							<li style="padding-left:4%;">CreateProcessAsUserA</li>
+							<li style="padding-left:4%;">CreateProcessAsUserW</li>
+							<li>CreateProcessWithLogonW</li>
+							<li>CreateProcessWithTokenW</li>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							CreateProcessA ile CreateProcessW Arasındaki Fark
+						</p>
+						<p align="justify">
+							CreateProcess fonksiyonlarını kullanırken parametre olarak veriler fonksyona veriler yazarız. Bu parametrelerdeki veriler ASCII (1 byte) tablosunu mu yoksa UNICODE (2 byte) tablosunu mu kullanacağını belirtmemiz lazım. Bu yüzden A ve W olarak iki adet fonksiyon ortaya çıkıyor. A: ASCII ve W: WIDE Chars yani UNICODE anlamına gelir.
+						</p>
+						<p align="justify">
+							Bu düzen diğer fonksiyonlar için de geçerlidir (CreateProcessAsUser gibi). Fakat her fonksiyonda ASCII desteklenmez. Bu yüzden sadece UNICODE tablosunu kullanarak fonksiyonları kullanmamız gerekir. Örneğin; CreateProcessWithLogonW ve CreateProcessWithTokenW gibi.
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">processthreadsapi.h</code> başlığı altında CreateProcess fonksiyonunu yalın halde kullandığınız taktirde hangi fonksiyonun kullanılacağına karar veren compiler emir komutlarını görüyorsunuz:
+						</p>
+						<p align="justify">
+							<!-- HTML generated using hilite.me --><div style="background: #202020; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .1em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #cd2828; font-weight: bold">#ifdef UNICODE</span>
+<span style="color: #cd2828; font-weight: bold">#define CreateProcess  CreateProcessW</span>
+<span style="color: #cd2828; font-weight: bold">#else</span>
+<span style="color: #cd2828; font-weight: bold">#define CreateProcess  CreateProcessA</span>
+<span style="color: #cd2828; font-weight: bold">#endif </span><span style="color: #999999; font-style: italic">// !UNICODE</span>
+</pre></div>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							CreateProcess* Alabileceği Parametreler
+						</p>
+						<p align="justify">
+							<li align="justify">Çalıştırılabilir dosyanın path'i ve parametreleri</li>
+							<li align="justify">Oluşturulacak yeni process ve thread için isteğe bağlı güvenlik ayarları.</li>
+							<li align="justify">Process oluşumunu etkileyen çeşitli flag'leri vardır. Bunların hepsini görmek için:</li>
+								<li align="justify" style="padding-left:6%;list-style-type: none;"><a href="https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags" target="_blank">MSDN -> Procss Creation Flags</a> veya <a href="13_09_2022.html">0x0ryctes -> Win32 API'lere Dalış</a></li>
+							<li align="justify">Yeni process için environment bloğunu tutan pointer. Bu parametre NULL ise yeni process çağıran process'in ortamı kullanılır. Peki nedir bu environment bloğu? Cevap için <a href="13_09_2022.html" target="_blank">Win32 API</a>'leri anlattığım sayfama bakabilirsiniz :)</li>
+							<li align="justify">İsteğe bağlı olarak verilen yeni oluşturulacak olan process'in dizini.</li>
+							<li align="justify">Çalıştırılabilir dosyanın path'i ve parametreleri</li>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Process Internals
+						</p>
+						<p align="justify">
+							Windows sistemlerde her bir process EPROCESS struct ile temsil edilir. Bu yapı birçok özelliği ve birkaç struct'ı daha point eder. Örnek vermek gerekirse; her bir process bir veya birden fazla thread'e sahiptir. Bu thread'ler de ETHREAD  struct ile temsil edilir (Thread ile ilgili daha fazla bilgi almak için ilgili başlığa gidiniz).
+						</p>
+						<p>
+							<center>...</center>
+						</p>
+						<p align="justify">
+							Daha detaylı bilgi için:
+							<a target="_blank" href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw">MSDN -> CreateProcessW</a>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Önerilen Kaynaklar
+						</p>
+						<p align="justify">
+							<li style="padding-left:4%;list-style-type: none;"><a target="_blank" href="C:\Users\adel\Desktop\github.io\topics\documents\25_09_2022\MSDN_ProcessAndThreads.pdf">MSDN -> Process And Threads</a></li>
+						</p>
+					</div>
+			</div>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-HG8JQ59PYY"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-HG8JQ59PYY');
+	</script>
+	</body>
+</html>

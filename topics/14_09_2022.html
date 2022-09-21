@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<title>Win32 API'lere Dalış: Pratik</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="..\styles\styles_topics.css">
+		<style>
+			.node {
+			  cursor: pointer;
+			}
+
+			.node circle {
+			  fill: #fff;
+			  stroke: steelblue;
+			  stroke-width: 1.5px;
+			}
+
+			.node text {
+			  font: 10px sans-serif;
+			}
+
+			.link {
+			  fill: none;
+			  stroke: #ccc;
+			  stroke-width: 1.5px;
+			}
+		</style>
+	</head>
+	<body style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('..\\images\\13_09_2022\\bg.JPG'); background-position: 0% 0%;">
+		<br><br><br><br><br>
+		<center>
+		<div class="topic_subject" name="topic_subject">
+			Win32 API'lere Dalış: Pratik
+		</div></center>
+		<br><br><br>
+		<div style="margin-top: 55px;height:2px;width:100%; background-color:white" class="hr" name="hr"></div>
+			<div style="background-color: #101010; padding: 10px">
+					<div class="topic_content" name="topic_content">
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							CreateProcess
+						</p>
+						<p>
+							<div style="background: #202020; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .1em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #cd2828; font-weight: bold">#include &lt;Windows.h&gt;</span>
+
+<span style="color: #6ab825; font-weight: bold">int</span> <span style="color: #447fcf">main</span><span style="color: #d0d0d0">(</span><span style="color: #6ab825; font-weight: bold">int</span> <span style="color: #d0d0d0">argc,</span> <span style="color: #6ab825; font-weight: bold">char</span><span style="color: #d0d0d0">*</span> <span style="color: #d0d0d0">argv[])</span> <span style="color: #d0d0d0">{</span>
+	<span style="color: #d0d0d0">STARTUPINFO</span> <span style="color: #d0d0d0">si;</span>
+	<span style="color: #d0d0d0">PROCESS_INFORMATION</span> <span style="color: #d0d0d0">pi;</span>
+
+	<span style="color: #d0d0d0">ZeroMemory(&amp;si,</span> <span style="color: #6ab825; font-weight: bold">sizeof</span><span style="color: #d0d0d0">(si));</span>
+	<span style="color: #d0d0d0">ZeroMemory(&amp;pi,</span> <span style="color: #6ab825; font-weight: bold">sizeof</span><span style="color: #d0d0d0">(pi));</span>
+
+	<span style="color: #d0d0d0">CreateProcess(</span>  <span style="color: #d0d0d0">(LPWSTR)</span><span style="color: #ed9d13">L&quot;C:\\Windows\\System32\\notepad.exe&quot;</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #d0d0d0">(LPWSTR)</span><span style="color: #ed9d13">L&quot;/w C:\\Users\\adel\\Desktop\\notes.txt&quot;</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #24909d">NULL</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #24909d">NULL</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #d0d0d0">FALSE,</span>
+			<span style="color: #3677a9">0</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #24909d">NULL</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #24909d">NULL</span><span style="color: #d0d0d0">,</span>
+			<span style="color: #d0d0d0">&amp;si,</span>
+			<span style="color: #d0d0d0">&amp;pi);</span>
+	<span style="color: #6ab825; font-weight: bold">return</span> <span style="color: #3677a9">0</span><span style="color: #d0d0d0">;</span>
+<span style="color: #d0d0d0">}</span>
+</pre></div>
+						</p>
+						<p align="justify">
+							Yukarıdaki kod compile edilip linklenerek çalıştırılabilir dosya oluşturuluyor varsayalım. Daha sonra bu dosyayı bir api tracer yardımıyla monitoring yaptığımızda:
+						</p>
+						<p align="justify">
+							<img style="width:75%;" src="..\images\13_09_2022\03.PNG">
+						</p>
+						<p align="justify">
+							Daha sonra bu fonksiyonun parametrelerine baktığımızda:
+						</p>
+						<p align="justify">
+							<img style="width:75%;" src="..\images\13_09_2022\04.PNG">
+						</p>
+					</div>
+			</div>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-HG8JQ59PYY"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-HG8JQ59PYY');
+	</script>
+	</body>
+</html>

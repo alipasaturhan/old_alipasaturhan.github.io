@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Win32 API'lere Dalış</title>
+		<title>Win32 API'lere Dalış: Teori</title>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="..\styles\styles_topics.css">
 		<style>
@@ -29,7 +29,7 @@
 		<br><br><br><br><br>
 		<center>
 		<div class="topic_subject" name="topic_subject">
-			Win32 API'lere Dalış
+			Win32 API'lere Dalış: Teori
 		</div></center>
 		<br><br><br>
 		<div style="margin-top: 55px;height:2px;width:100%; background-color:white" class="hr" name="hr"></div>
@@ -52,29 +52,13 @@
 						</p>
 						<p align="justify">
 							Windows API tarafından sağlanan fonksiyonlar, windows klasörü altında system32 (ve 64 bit için syswow64) klasörü altındaki dll dosyalarında bulunur. Bu dll dosyaları ise fonksiyonları barındıran başlıklardan oluşur. Kısaca şöyle bir gösterim doğru olabilir:
-							<img width="50%" src="..\images\13_09_2022\02.PNG">
+							<img class="other_img" name="other_img" width="50%" src="..\images\13_09_2022\02.PNG">
 						</p>
 						<p align="justify">
 							Tüm api header'lara ulaşmak için: <a href="https://docs.microsoft.com/en-us/windows/win32/api/">docs.microsoft.com/en-us/windows/win32/api/</a>						</p>
-						<p align="justify">
-							sekiz kategoride gruplandırılabilir:
+
+
 						</p>
-						<p align="justify">
-							<li>Temel Hizmetler: Windows sistemde mevcut olan kaynaklara erişimi sağlar. Bu erişimi ise X:\\windows\system32\ klasörü altındaki dll dosyalarından sağlarız.</li>
-							<li>Heap (.heap): </li>
-							<li>Data:</li>
-								<li style="padding-left:4%;">Uninitialized data (.bss): </li>
-								<li style="padding-left:4%;">Initialized data (.data): </li>
-							<li>Text (.text): Program komutlarının bulunduğu segmenttir.</li>
-						</p>
-						<p align="justify">
-							Windows API dosyalarının temelini kernel32.dll, user32.dll ve gdi32.dll dosyaları oluşturur.
-						</p>
-
-
-
-
-
 						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
 							windows.h
 						</p>
@@ -82,28 +66,269 @@
 							Windows API'sindeki tüm işlevler, Windows programcıları tarafından kullanılan tüm ortak makrolar ve çeşitli işlevler tarafından kullanılan tüm veri türleri için bildirimler içeren C ve C ++ programlama dilleri için Windows'a özgü bir başlık dosyasıdır. Geliştirilecek uygulamaların başına eklenen &lt;windows.h&gt; başlık dosyası ile birlikte uygulamalara dahil edilerek kullanılırlar.
 						</p>
 						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
-							KERNEL32.dll
+							Structures
 						</p>
 						<p align="justify">
+							<li>SECURITY_ATTRIBUTES (Windows)</li>
+							<li>SECURITY_DESCRIPTOR (winnt.h)</li>
+							<li>PROCESS_INFORMATION (processthreadsapi.h)</li>
+							<li>STARTUPINFOA (processthreadsapi.h)</li>
+							<li>STARTUPINFOW (processthreadsapi.h)</li>
+							<li>STARTUPINFOEXA (winbase.h)</li>
+							<li>STARTUPINFOEXW (winbase.h)</li>
 
 						</p>
 						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
 							processthreadsapi.h
 						</p>
-							<li>CreateProcessA</li>
-						    <li>CreateProcessW</li>
-							<li>CreateProcessAsUserA</li>
-							<li>CreateProcessAsUserW</li>
-							<li>CreateThread</li>
-							<li>ExitProcess</li>
-						    <li>ExitThread</li>
+						<p align="justify">
+							<li>CreateProcess</li>
+							<li style="padding-left:4%;">CreateProcessA</li>
+							<li style="padding-left:4%;">CreateProcessW</li>
+							<li>CreateProcessAsUser</li>
+							<li style="padding-left:4%;">CreateProcessAsUserA</li>
+							<li style="padding-left:4%;">CreateProcessAsUserW</li>
+							<li>GetStartupInfoW</li>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							processenv.h
+						</p>
+						<p align="justify">
+							<li>GetCommandLineWA</li>
+							<li>GetCommandLineW </li>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							securitybaseapi.h
+						</p>
+						<p align="justify">
+							<li>GetSecurityDescriptorControl</li>
+							<li>GetSecurityDescriptorDacl</li>
+							<li>GetSecurityDescriptorGroup</li>
+							<li>GetSecurityDescriptorLength</li>
+							<li>GetSecurityDescriptorOwner</li>
+							<li>GetSecurityDescriptorRMControl</li>
+							<li>GetSecurityDescriptorSacl</li>
+							<li>InitializeSecurityDescriptor</li>
+							<li>IsValidSecurityDescriptor</li>
+							<li>SetSecurityDescriptorDacl</li>
+							<li>SetSecurityDescriptorGroup</li>
+							<li>SetSecurityDescriptorOwner</li>
+							<li>SetSecurityDescriptorRMControl</li>
+							<li>SetSecurityDescriptorSacl</li>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							handleapi.h
+						</p>
+						<p align="justify">
+							<li>CloseHandle</li>
+						</p>
 						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
 							winbase.h
 						</p>
+						<p align="justify">
 							<li>CreateProcessWithLogonW</li>
 							<li>CreateProcessWithTokenW</li>
+							<li>SetCurrentDirectory</li>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Fonksiyonlarda A ve W Son Ek Arasındaki Fark
+						</p>
 						<p align="justify">
-							<img src="..\images\13_09_2022\01.PNG">
+							Örneğin CreateProcess fonksiyonlarını kullanırken parametre olarak girdiler yazarız. Bu parametrelerdeki veriler ASCII (1 byte) tablosunu mu yoksa UNICODE (2 byte) tablosunu mu kullanacağını belirtmemiz lazım. Bu yüzden A ve W olarak iki adet fonksiyon ortaya çıkıyor. A: ASCII ve W: WIDE Chars yani UNICODE anlamına gelir.
+						</p>
+						<p align="justify">
+							Ayrıca bazı parametrelerin veri tipleri değiştirilir. Bunun nedeni yukarıda açıklandığı gibi karakter encoding olayıdır. Örnek olarak A eki olan fonksiyonda LPCSTR, W eki olan fonksiyonda ise LPCWSTR tipi kullanılır.
+						</p>
+						<p align="justify">
+							Bu düzen diğer fonksiyonlar için de geçerlidir (CreateProcessAsUser gibi). Fakat her fonksiyonda ASCII desteklenmez. Bu yüzden sadece UNICODE tablosunu kullanarak fonksiyonları kullanmamız gerekir. Örneğin; CreateProcessWithLogonW ve CreateProcessWithTokenW gibi.
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">processthreadsapi.h</code> başlığı altında CreateProcess fonksiyonunu yalın halde kullandığınız taktirde hangi fonksiyonun kullanılacağına karar veren compiler emir komutlarını görüyorsunuz:
+						</p>
+						<p align="justify">
+							<!-- HTML generated using hilite.me --><div style="background: #202020; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .1em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #cd2828; font-weight: bold">#ifdef UNICODE</span>
+<span style="color: #cd2828; font-weight: bold">#define CreateProcess  CreateProcessW</span>
+<span style="color: #cd2828; font-weight: bold">#else</span>
+<span style="color: #cd2828; font-weight: bold">#define CreateProcess  CreateProcessA</span>
+<span style="color: #cd2828; font-weight: bold">#endif </span><span style="color: #999999; font-style: italic">// !UNICODE</span>
+</pre></div>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Fonksiyon Parametreleri
+						</p>
+						<p align="justify">
+							<li style="list-style-type: none;" align="justify"><b>CreateProcess</b></li>
+							<p>
+								<div style="background: #202020; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .1em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #d0d0d0">BOOL</span> <span style="color: #447fcf">CreateProcessA</span><span style="color: #d0d0d0">(</span>
+  <span style="color: #d0d0d0">[in,</span> <span style="color: #d0d0d0">optional]</span>      <span style="color: #d0d0d0">LPCSTR</span>                <span style="color: #d0d0d0">lpApplicationName,</span>
+  <span style="color: #d0d0d0">[in,</span> <span style="color: #d0d0d0">out,</span> <span style="color: #d0d0d0">optional]</span> <span style="color: #d0d0d0">LPSTR</span>                 <span style="color: #d0d0d0">lpCommandLine,</span>
+  <span style="color: #d0d0d0">[in,</span> <span style="color: #d0d0d0">optional]</span>      <span style="color: #d0d0d0">LPSECURITY_ATTRIBUTES</span> <span style="color: #d0d0d0">lpProcessAttributes,</span>
+  <span style="color: #d0d0d0">[in,</span> <span style="color: #d0d0d0">optional]</span>      <span style="color: #d0d0d0">LPSECURITY_ATTRIBUTES</span> <span style="color: #d0d0d0">lpThreadAttributes,</span>
+  <span style="color: #d0d0d0">[in]</span>                <span style="color: #d0d0d0">BOOL</span>                  <span style="color: #d0d0d0">bInheritHandles,</span>
+  <span style="color: #d0d0d0">[in]</span>                <span style="color: #d0d0d0">DWORD</span>                 <span style="color: #d0d0d0">dwCreationFlags,</span>
+  <span style="color: #d0d0d0">[in,</span> <span style="color: #d0d0d0">optional]</span>      <span style="color: #d0d0d0">LPVOID</span>                <span style="color: #d0d0d0">lpEnvironment,</span>
+  <span style="color: #d0d0d0">[in,</span> <span style="color: #d0d0d0">optional]</span>      <span style="color: #d0d0d0">LPCSTR</span>                <span style="color: #d0d0d0">lpCurrentDirectory,</span>
+  <span style="color: #d0d0d0">[in]</span>                <span style="color: #d0d0d0">LPSTARTUPINFOA</span>        <span style="color: #d0d0d0">lpStartupInfo,</span>
+  <span style="color: #d0d0d0">[out]</span>               <span style="color: #d0d0d0">LPPROCESS_INFORMATION</span> <span style="color: #d0d0d0">lpProcessInformation</span>
+<span style="color: #d0d0d0">);</span>
+</pre></div>
+
+							</p>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpApplicationName</code> Çalıştırılabilir PE dosyanın path değerini alır. lpApplicationName parametresi NULL olabilir. Bu durumda, modül adı, lpCommandLine dizesindeki ilk boşlukla ayrılmış belirteç olmalıdır. Bu yöntem 16 bitlik çalıştırılabilir dosyalar için zorunludur fakat tüm uygulamalarda bu yapılabilir. Bu durumda 16 bitlik ise lpCommandLine tarafından gösterilen dize, yürütülebilir dosyayı ve parametrelerini belirtmelidir.</li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpCommandLine</code> Çalıştırılabilir PE dosyanın alabileceği gerekli veya isteğe bağlı parametrelerini alır. Örnek olarak lpApplicationName parametresine notepad.exe verildiği zaman bir .txt dosyası ismi vermek gibidir. Böylece sadece notepad.exe değil verilen .txt dosyası açılır. <code class="p_code" name="p_code">MAX_PATH</code>, sonlandırma karakteri de (0x00) dahil 2^15-1 uzunluktadır. Bu işlevin Unicode sürümü CreateProcessW, bu dizenin içeriğini değiştirebilir. Bu nedenle bu parametre read-only belleğe (bellek hücresine) bir işaretçi olamaz (örneğin const bir değişkene). Eğer olursa fonksiyonda erişim ihlallerine neden olabilir. Ayrıca bu parametre NULL ise commandLine olarak lpApplicationName tarafından gösterilen dize kullanılır. İşletim sistemi her iki parametreyi birleştirmek için (lpApplicationName ve lpCommandLine) GetCommandLine fonksiyonunu çağırır (komutun işlevine bakmak için ilgili başlığa gidiniz). lpApplicationName NULL ise komut satırının boşlukla ayrılmış ilk belirteci modül adını (yani lpApplicationName yerine) belirtir.
+							</li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpProcessAttributes</code> Oluşturulacak yeni process için isteğe bağlı güvenlik ayarlarını ayarlayan parametredir.
+								Sub process'ler (child process) için devralınıp devralınamayacağını belirtir.
+								Oluşturulacak process için güvenlik ayarlarını barındıran bu parametre, Windows sistemdeki bir C++ structure yapısının pointer'ını tutar. Pointer'ın tuttuğu bu yapıyı güvenlik ayarlarını barındıran bir küme olarak düşünebiliriz. Bu yapının ismi <q>SECURITY_ATTRIBUTES</q> idir. lpProcessAttributes NULL ise process devralınamaz. Eğer lpProcessAttributes veya SECURITY_ATTRIBUTES.lpSecurityDescriptor NULL ise, oluşturulacak process default değerlerde SECURITY_DESCRIPTOR oluşturacak. İlgili başlığa giderek bu yapı hakkında bilgi alabilirsiniz.</li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpThreadAttributes</code> Oluşturulacak yeni thread için isteğe bağlı güvenlik ayarlarını belirtir. Tıpkı lpProcessAttributes mantığındadır fakat burada her şey thread için geçerlidir. Örneğin parametre olarak lpThreadAttributes veya lpSecurityDescriptor NULL ise oluşturulan thread için güvenlik ayarları default security descriptor kullanır.</li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">bInheritHandles</code> bla bla bla</li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">dwCreationFlags</code> Process oluşumunu etkileyen çeşitli flag'leri vardır. Bunların hepsini görmek için:
+								<a href="https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags" target="_blank">MSDN -> Procss Creation Flags</a></li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpEnvironment</code> Yeni process için environment bloğunu tutan pointer. Bu parametre NULL ise yeni process çağıran process'in ortamını kullanılır. Peki nedir bu environment bloğu?</li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpCurrentDirectory</code> İsteğe bağlı olarak ayarlanan bu parametre yeni oluşturulacak olan process'in working directory path'idir. Dize (string) ayrıca bir UNC (Universal Naming Convention) yolu belirtebilir. Bu parametre NULL ise yeni process çağıran işlemle aynı geçerli sürücüye ve dizine sahip olacaktır.</li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpStartupInfo</code> <q>STARTUPINFO</q> veya <q>STARTUPINFOEX</q> yapısının işaretini tutar. Gelişmiş özelliklerle ayarlamak istenirse STARTUPINFOEX kullanılır. Eğer STARTUPINFOEX kullanılacaksa <q>dwCreationFlags</q> parametresinde <q>EXTENDED_STARTUPINFO_PRESENT</q> belirtilmeli.</li>
+							<li style="list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpProcessInformation</code> Yeni process hakkında id bilgilerini alan bir <q>PROCESS_INFORMATION</q> yapısının işaretini alır. <q>PROCESS_INFORMATION</q> hakkında daha fazla bilgi için ilgili başlığa gidiniz.</li>
+						</p>
+
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Structure Üyeleri
+						</p>
+						<p align="justify">
+							<li style="list-style-type: none;" align="justify"><b>SECURITY_ATTRIBUTES (Windows)</b></li>
+							<p align="justify">
+								Güvenlik tanımlayıcısını içerir ve bu yapı belirtilerek alınan tanıtıcının devralınabilir olup olmadığını belirtir.
+							</p>
+							<p align="justify">
+								Bu yapı, CreateFile, CreatePipe, CreateProcess, RegCreateKeyEx veya RegSaveKeyEx gibi çeşitli işlevler tarafından oluşturulan nesneler için güvenlik ayarları sağlar.
+							</p>
+							<p>
+								<div style="background: #202020; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .1em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">typedef</span> <span style="color: #6ab825; font-weight: bold">struct</span> <span style="color: #d0d0d0">_SECURITY_ATTRIBUTES</span> <span style="color: #d0d0d0">{</span>
+  <span style="color: #d0d0d0">DWORD</span> <span style="color: #a61717; background-color: #e3d2d2"></span><span style="color: #d0d0d0">nLength;</span>
+  <span style="color: #d0d0d0">LPVOID</span> <span style="color: #d0d0d0">lpSecurityDescriptor;</span>
+  <span style="color: #d0d0d0">BOOL</span> <span style="color: #a61717; background-color: #e3d2d2"></span><span style="color: #d0d0d0">bInheritHandle;</span>
+<span style="color: #d0d0d0">}</span> <span style="color: #d0d0d0">SECURITY_ATTRIBUTES,</span> <span style="color: #d0d0d0">*PSECURITY_ATTRIBUTES,</span> <span style="color: #d0d0d0">*LPSECURITY_ATTRIBUTES;</span></pre></div>
+							</p>
+							<p align="justify">
+								<code class="p_code" name="p_code">nLength</code> SECURITY_ATTRIBUTES yapısının bayt cinsinden boyutunu alır. Bu parametreye değer olarak <q>sizeof(SECURITY_ATTRIBUTES)</q> komutu gelebilir.
+							</p>
+							<p align="justify">
+								<code class="p_code" name="p_code">lpSecurityDescriptor</code> Yeni bir process oluşturulduğunda döndürülen tanıtıcının devralınıp alınmayacağını belirten bir Boole değerini alır. Bu üye TRUE ise, yeni süreç tanıtıcıyı devralır.
+							</p>
+							<p align="justify">
+								<code class="p_code" name="p_code">bInheritHandle</code>
+							</p>
+						<p align="justify">
+							<li style="list-style-type: none;" align="justify"><b>SECURITY_DESCRIPTOR (winnt.h)</b></li>
+						</p>
+						<p>
+							<div style="background: #202020; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .1em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">typedef</span> <span style="color: #6ab825; font-weight: bold">struct</span> <span style="color: #d0d0d0">_SECURITY_DESCRIPTOR</span> <span style="color: #d0d0d0">{</span>
+  <span style="color: #d0d0d0">BYTE</span>                        <span style="color: #d0d0d0">Revision;</span>
+  <span style="color: #d0d0d0">BYTE</span>                        <span style="color: #d0d0d0">Sbz1;</span>
+  <span style="color: #d0d0d0">SECURITY_DESCRIPTOR_CONTROL</span> <span style="color: #d0d0d0">Control;</span>
+  <span style="color: #d0d0d0">PSID</span>                        <span style="color: #d0d0d0">Owner;</span>
+  <span style="color: #d0d0d0">PSID</span>                        <span style="color: #d0d0d0">Group;</span>
+  <span style="color: #d0d0d0">PACL</span>                        <span style="color: #d0d0d0">Sacl;</span>
+  <span style="color: #d0d0d0">PACL</span>                        <span style="color: #d0d0d0">Dacl;</span>
+<span style="color: #d0d0d0">}</span> <span style="color: #d0d0d0">SECURITY_DESCRIPTOR,</span> <span style="color: #d0d0d0">*PISECURITY_DESCRIPTOR;</span>
+</pre></div>
+
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">Revision</code>
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">Sbz1</code>
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">Control</code>
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">Owner</code>
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">Group</code>
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">Sacl</code>
+						</p>
+						<p align="justify">
+							<code class="p_code" name="p_code">Dacl</code>
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Win32 API Veri Tipleri
+						</p>
+						<p align="justify">
+<table cellspacing="0">
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-color: #DEDEDE;border-width:1">BOOL</td><td style="padding: 5;text-align: center;border-right-style:solid; border-color: #DEDEDE;border-width:1">True veya False olmak zorunda</td></tr>
+	<tr><td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">BOOLEAN</td><td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">True veya False olmak zorunda</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">BYTE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">8 bitlik veri tutar</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">DWORD<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">32 bitlik işaretsiz tam sayı tutar</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">DWORDLONG<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">64 bitlik işaretsiz tam sayı tutar</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">DWORD_PTR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">DWORD tipindeki bir değişkenin adresini tutar</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HANDLE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HANDLE objesi oluşturmak içindir</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HBITMAP<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HBRUSH<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HCURSOR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HDC<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HENHMETAFILE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HFILE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HFONT<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HGDIOBJ<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HGLOBAL<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HICON<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HINSTANCE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HKEY<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HLOCAL<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HMENU<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HMETAFILE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HMODULE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HMONITOR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HPALETTE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HPEN<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HRESULT<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HRGN<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HRSRC<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HWND<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">INT<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">INT_PTR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">INT32<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">INT64<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LANGID<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LCID<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LCTYPE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LGRPID<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LONG<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LONGLONG<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LONG_PTR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPARAM<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPCSTR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPCTSTR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPCVOID<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPCWSTR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPDWORD<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPHANDLE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPINT<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPLONG<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPSTR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPVOID<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LPWSTR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">LRESULT<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">QWORD<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">SHORT<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">TBYTE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">UINT<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">VOID<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">WCHAR<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">WORD<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">WPARAM<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
+</table>
+						</p>
+						<p align="justify">
+							Daha detaylı bilgi için:
+							<a target="_blank" href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw">MSDN -> CreateProcessW</a>
+						</p>
+						<p align="justify">
+							<li style="padding-left:4%;list-style-type: none;"><a target="_blank" href="https://docs.microsoft.com/en-us/windows/win32/api/">MSDN -> Process And Threads</a></li>
 						</p>
 					</div>
 			</div>
