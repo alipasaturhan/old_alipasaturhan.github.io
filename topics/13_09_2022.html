@@ -181,7 +181,7 @@
 								Sub process'ler (child process) için devralınıp devralınamayacağını belirtir.
 								Oluşturulacak process için güvenlik ayarlarını barındıran bu parametre, Windows sistemdeki bir C++ structure yapısının pointer'ını tutar. Pointer'ın tuttuğu bu yapıyı güvenlik ayarlarını barındıran bir küme olarak düşünebiliriz. Bu yapının ismi <q>SECURITY_ATTRIBUTES</q> idir. lpProcessAttributes NULL ise process devralınamaz. Eğer lpProcessAttributes veya SECURITY_ATTRIBUTES.lpSecurityDescriptor NULL ise, oluşturulacak process default değerlerde SECURITY_DESCRIPTOR oluşturacak. İlgili başlığa giderek bu yapı hakkında bilgi alabilirsiniz.</li>
 							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpThreadAttributes</code> Oluşturulacak yeni thread için isteğe bağlı güvenlik ayarlarını belirtir. Tıpkı lpProcessAttributes mantığındadır fakat burada her şey thread için geçerlidir. Örneğin parametre olarak lpThreadAttributes veya lpSecurityDescriptor NULL ise oluşturulan thread için güvenlik ayarları default security descriptor kullanır.</li>
-							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">bInheritHandles</code> bla bla bla</li>
+							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">bInheritHandles</code> </li>
 							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">dwCreationFlags</code> Process oluşumunu etkileyen çeşitli flag'leri vardır. Bunların hepsini görmek için:
 								<a href="https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags" target="_blank">MSDN -> Procss Creation Flags</a></li>
 							<li style="padding-bottom: 15px;list-style-type: none;" align="justify"><code class="p_code" name="p_code">lpEnvironment</code> Yeni process için environment bloğunu tutan pointer. Bu parametre NULL ise yeni process çağıran process'in ortamını kullanılır. Peki nedir bu environment bloğu?</li>
@@ -254,7 +254,7 @@
 						<p align="justify">
 							<code class="p_code" name="p_code">Dacl</code>
 						</p>
-						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+						<!--<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
 							Win32 API Veri Tipleri
 						</p>
 						<p align="justify">
@@ -322,7 +322,7 @@
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">WORD<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">WPARAM<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">AAAAAAAA</td></tr>
 </table>
-						</p>
+</p>-->
 						<p align="justify">
 							Daha detaylı bilgi için:
 							<a target="_blank" href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw">MSDN -> CreateProcessW</a>
