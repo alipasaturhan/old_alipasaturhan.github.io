@@ -288,65 +288,126 @@
 						3- DarwinDataBlock (0xA0000006)
 					</p>
 					<p align="justify">
-						HasDarwinID bayrağı set edilmişse açılır. MSI dosyaları için etkinleştirilen bir bloktur.
+						HasDarwinID bayrağı set edilmişse açılır. MSI dosyaları için etkinleştirilen bir bloktur. LNK dosyası aslında Windows Installer alt sistemini çağırıyor ve Windows Installer ise paketimizdeki belirli yürütülebilir dosyayı çağırıyor.
 					</p>
 
 					<p style="color: yellow; font-size: 20px; margin-bottom: -15px" align="justify">
 						4- EnvironmentVariableDataBlock (0xA0000001)
 					</p>
 					<p align="justify">
-						LNK dosyası için çevresel değişkenler barındırır.
+						LNK dosyası için geliştirici tarafından verilen custom çevresel değişkenler barındırır.
 					</p>
 
 					<p style="color: yellow; font-size: 20px; margin-bottom: -15px" align="justify">
 						5- IconEnvironmentDataBlock (0xA0000007)
 					</p>
 					<p align="justify">
-						Icon dosyasına giden path dizinindeki kısa yolları barındırır. (%system%, %windir% vb.) 
+						LNK dosyasına verilen icon dosyasının path'i bilinen klasörlerden geçiyorsa, icon dosyasının yolu çevre değişkenleriyle beraber tutulur (mesela %system%, %windir% vb. yollardan geçiyorsa)
 					</p>
-
+					<p align="justify">
+						Örnek olması açısından aşağıdaki lnk dosyasının icon path'ine bakın:
+					</p>
+					<p align="justify">
+						<img src="..\images\16_10_2022\12.PNG" style="width: 75%">
+					</p>
+					<p align="justify">
+						Şimdi de IconEnvironmentData kısmına bakın
+					</p>
+					<p align="justify">
+						<img src="..\images\16_10_2022\13.PNG" style="width: 75%">
+					</p>
+					<p align="justify">
+						Buradaki amaç icon'un bulunabilmesi için path'te çevirmenlik yapılmak istenmesidir.
+					</p>
 					<p style="color: yellow; font-size: 20px; margin-bottom: -15px" align="justify">
 						6- KnownFolderDataBlock (0xA000000B)
 					</p>
 					<p align="justify">
-						HasDarwinID bayrağı set edilmişse bu block açılır. 
+						LNK dosyası bilinen bir klasörü işaret ettiğinde, klasörün izini sürmek için kullanılabilir. Böylece LNK dosyasındaki IDList hedef bağlantılar (LinkTargetIDList yapısındaki) yüklendiğinde, bu blok içerisindeki veriler yardımcı bir çevirmenlik görevi görebilir.
 					</p>
-
+					<p align="justify">
+						IconEnvironmentDataBlock için yaptığımızı burada da yapalım:
+					</p>
+					<p align="justify">
+						<img src="..\images\16_10_2022\14.PNG" style="width: 75%">
+					</p>
+					<p align="justify">
+						Bir de KnownFloderDataBlock'a bakın
+					</p>
+					<p align="justify">
+						<img src="..\images\16_10_2022\15.PNG" style="width: 75%">
+					</p>
+					<p align="justify">
+						Burada gördüğünüz <code class="p_code" name="p_code">{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}</code> alfanumerik dizisi Windows'un klasörler için atadığı özel kimlik kartı gibi düşünebiliriz demiştik. Google amcaya bu kimliği sorarsanız size MSDN'den ne olduğunu söyleyecektir.
+					</p>
+					<p align="justify">
+						Şimdi örnek olması açısından aşağıdaki gibi kimlik adresin hangi klasörü işaret ettiği gösterilmiştir.
+					</p>
+					<p align="justify">
+						<img src="..\images\16_10_2022\16.png" style="width: 50%">
+					</p>
+					<p align="justify">
+						Diğer kimlik'ler (GUID) için: <a href="https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid#constants">tıkla</a>
+					</p>
 					<p style="color: yellow; font-size: 20px; margin-bottom: -15px" align="justify">
 						7- PropertyStoreDataBlock (0xA0000009)
 					</p>
 					<p align="justify">
-						Uygulamalar tarafından LNK dosyasında fazladan veri depolamak için kullanılabilecek bir dizi özellik belirtir.
+						Uygulamalar tarafından LNK dosyasında fazladan veri depolamak için kullanılabilecek bir dizi özellik belirtir. Bu kısmı metadata olarak düşünebilirsiniz.
 					</p>
 
 					<p style="color: yellow; font-size: 20px; margin-bottom: -15px" align="justify">
 						8- ShimDataBlock (0xA0000008)
 					</p>
 					<p align="justify">
-						HasDarwinID bayrağı set edilmişse bu block açılır. 
+						<!-- -->
 					</p>
 
 					<p style="color: yellow; font-size: 20px; margin-bottom: -15px" align="justify">
 						9- SpecialFolderDataBlock (0xA0000005)
 					</p>
 					<p align="justify">
-						HasDarwinID bayrağı set edilmişse bu block açılır. 
+						Bu yapının tam olarak ne işe yaradığından emin değilim ama sanırım <code class="p_code" name="p_code">KnownFloderDataBlock</code> yapısındaki kimliğin CSIDL'isni tutuyor. 
 					</p>
-
+					<p align="justify">
+						<code class="p_code" name="p_code">CSIDL Equivalent</code> kısmında <code class="p_code" name="p_code">CSIDL_SYSTEM</code> belirtcini görüyorsunuz. Google amcada "CSIDL_SYSTEM" diye arattığımızda karşımıza çıkan kaynaklardan hangi ID'ye eşit olduğunu bulabilirsiniz. Örnek olması için aşağıda adım adım anlatılmıştır: 
+					</p>
+					<p align="justify">
+						<img src="..\images\16_10_2022\17.PNG" style="width: 75%">
+					</p>
+					<p align="justify">
+						SpecialFolderID değerinin decimal olarak 37 olduğunu görüyorsunuz. CSIDL listesinden arattığımızda
+					</p>
+					<p align="justify">
+						<img src="..\images\16_10_2022\18.PNG" style="width: 75%">
+					</p>
+					<p align="justify">
+						Diğer CSIDL değerlerine bakmak için: <a href="https://tarma.com/support/im9/using/symbols/functions/csidls.htm">tıkla</a>
+					</p>
 					<p style="color: yellow; font-size: 20px; margin-bottom: -15px" align="justify">
 						10- TrackerDataBlock (0xA0000003)
 					</p>
 					<p align="justify">
-						HasDarwinID bayrağı set edilmişse bu block açılır. 
+						Bu kısmı çok detaylı görmekte fayda var. Çünkü Digital Forensic alanında çalışanlar için ilk bakılacak yerlerden birisi burasıdır. Aşağıda bu kısımla ilgili bir çizelge görebilirsiniz:
 					</p>
-
+					<p align="justify">
+						<iframe width="100%" height="300" src="https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1#R7Zpbc6IwGIZ%2FjZfdgXBQL9dDD7Ntta3b2t7spJBC1kjcGDz012%2BAICDa7W63QKky45A3CcTn%2FRLMNzS07nR1wuDMvaA2Ig2g2KuG1msA0FKA%2BA6EdSQYLS0SHIbtSFIT4QY%2FIykqUvWxjeaZhpxSwvEsK1rU85DFMxpkjC6zzZ4oyd51Bh2UE24sSPLqHba5K38WaCb6KcKOG99ZNdtRzSO0Jg6jvifv1wCaEn6i6imMryWFuQttukxJWr%2BhdRmlPDqbrrqIBGhjbFG%2F4z21m3Ez5PHXdLhDJ7fDwbAzcIf968nD6IFcnR2puhwcX8dAkC34yCJl3KUO9SDpJ2on%2FNEouKwiSkmbc0pnQlSF%2BBNxvpZmQ59TIbl8SmQtWmE%2BTp3fB5f6YshSbyWvHBbWccHjbD1OGgbF%2B3Rd0i0sxf2eqMeP4RSTQDhFZIE4tqCs6FJCmdBt9AR9IjB25pzRCYp14emxEhyiJs9bWhAASwmS%2FgmiUyQGIhowRCDHi2zAQRm3zqbdpuuQYnELoMgpputyiskZpptG9hJz6jMLyV5JBIiT1DASKYyL3THybQb98Xz49dFHv0aLH5fT2XX%2FSG2WGSNJXNynav5vjPzJ9C2Hd0ZBZEIkXXX4oD3Qr9pg1P1%2B2n8e355dHgHpGofMQfwF3uYboyjj%2F1%2Bb3TqYXaTZzTLN3vycCpit%2FJPZ6ocy%2B63Ph7eZDQ5mF2k2KNVs7WB2kWZrpZpd6p%2F4z2e2XqrZxsHsIs02CjL7xVEuIPHlrUYMWhPEepDDDqHWJBcNWa%2BXLuboZgZDGEsGZ1lf86zDT7A9xoSkdCU8trbNQftmcLy0PV4gxtEqJeVhylpNUTMbXUOTqZNlkpgBMRI3lZTRlffaDeXwh8zDaVIp7jnIO6zYy72tZ7DrRh67GmexCsEO9mF3PMh9Vif2AFQNvpaDf448R4ylPtA1o2rQ9Rz0W8TmmHo1oq63qkY9%2F3S9gJaLPXTWqxF3U60ad7VCu9OPkWTcnyh%2BxV%2FY9u7wKCihXKHN6SfwWlXKNNvMLag9RkWP%2BiymqpldTE219MW0QgmBDzzBmq%2BdYKUm8VXzYHaRZpeaxG%2FuXk07mNVqN2boVVtS2%2FseY3GCqhbct9I%2BZqts7LHvO7iDGnHfTvlUAHw%2Bz5leaWoV9dtZiArQz6c7M%2FTrFPvbuYj3pC%2BKyduV0ctwyRusWv83"></iframe>
+					</p>
+					<p align="justify">
+						<b>MachineID: </b>Bu bloğun ilk önemli kısmı, LNK dosyasının en son bulunuduğu makinenin NETBIOS ismini tutar. Nedir bu NETBIOS? diyecek olursanız, kısaca ağda bu makineyi hangi isimle tanıdığımızı belirten yapıdır.
+					</p>
+					<!--<p align="justify">
+						<b>Droid: </b>Volume Droid ve File Droid adında iki kısma ayrılır. DROID (Digital Record Object Identification)
+					</p>-->
 					<p style="color: yellow; font-size: 20px; margin-bottom: -15px" align="justify">
 						11- VistaAndAboveIDListDataBlock (0xA000000C)
 					</p>
 					<p align="justify">
-						HasDarwinID bayrağı set edilmişse bu block açılır. 
+						LinkTargetIDList yapısı yerine kullanılabilecek alternatif bir IDList belirtir.
 					</p>
-
+					<!--<p class="topic_sub_subject" name="topic_sub_subject" align="justify" id="NEDIR_BU_GUID_SID_CLSID_APPID_UUID">
+						Nedir Bu GUID, CLSID, SID, APPID, UUID?
+					</p>-->
 					<p class="topic_sub_subject" name="topic_sub_subject" align="justify" id="SHOW_COMMAND_VALUES">
 						SHOW_COMMAND_VALUES
 					</p>
@@ -372,14 +433,14 @@
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HasIconLocation<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">StringData bölümlerinden IconLocation kısmının olup olmadığnı belirtir</td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">IsUnicode<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0" align="justify">StringData bölümleri için Unicode (UTF-16 little-endian) kodlaması kullanılıp kullanılmadığını belirtir. Eğer set edilmemişse sistem varsayılan karakter kodlama sistemini (win için ASCII) kullanır</td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">ForceNoLinkInfo<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Set edilmişse LinkInfo başlığı dikkate alınmaz</td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HasExpString<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HasExpString<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">ExtraDataBlock bölümündeki EnvironmentVariableDataBlock olup olmadığını belirtir</td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">RunInSeparateProcess<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HasDarwinID<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">RunAsUser<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HasExpIcon<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HasDarwinID<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">ExtraDataBlock bölümündeki DarwinDataBlock olup olmadığını belirtir</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">RunAsUser<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Hedef uygulamayı farklı bir kullanıcıdan açılmak istenirse bu belirteç set edilir</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">HasExpIcon<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">ExtraDataBlock bölümündeki IconEnvironmentDataBlock olup olmadığını belirtir</td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">NoPidlAlias<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">RunWithShimLayer<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">ForceNoLinkTrack<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">RunWithShimLayer<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">ExtraDataBlock bölümündeki ShimDataBlock olup olmadığını belirtir</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">ForceNoLinkTrack<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Set edilmişse ExtraDataBlock bölümündeki TrackerBlock başlığı dikkate alınmaz</td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">EnableTargetMetadata<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">DisableLinkPathTracking<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">DisableKnownFolderTracking<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
