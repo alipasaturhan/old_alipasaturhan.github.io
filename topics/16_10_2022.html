@@ -44,10 +44,10 @@
 						<i>CLSID veya Sınıf Tanımlayıcı, bir dize veya alphanumeric (Hem harf hemde Sayısal) bir simge dizesidir ve genellikle Windos Bileşeni Nesne Modeli veya COM tabanlı bir programın belirli örneğini temsil eder.</i>
 					</p>
 					<p align="justify">
-						<b>LinkFlags[4]: </b>Shell Link hakkında bilgileri barındırır. Tüm flaglara bakmak için <a href="#LINK_FLAGS"><code class="p_code" name="p_code">LINK_FLAGS</code></a> başlığına bakın.
+						<b>LinkFlags[4]: </b>Shell Link hakkında optional özellikler kullanılacak mı yoksa kullanılmayacak mı gibi bilgileri barındırır. Bu kısmı konunun ilerleyen kısımlarında daha iyi anlayacaksınız. Tüm flaglara bakmak için <a href="#LINK_FLAGS"><code class="p_code" name="p_code">LINK_FLAGS</code></a> başlığına bakın.
 					</p>
 					<p align="justify">
-						<b>FileAttributes[4]: </b>FileAttributesFlags yapısındaki bitleri tutar. Bu bitler hedefinin dosya özniteliklerini belirten bitleri tanımlar. <a href="#FILE_ATTRIBUTE_FLAGS"><code class="p_code" name="p_code">FileAttributesFlags</code></a>, bağlantı hedefi mevcut değilse veya hedefe erişim verimsiz olacaksa kullanılabilir.
+						<b>FileAttributes[4]: </b>İşaret edilen dosyanın özniteliğini tutar. <a href="#FILE_ATTRIBUTE_FLAGS"><code class="p_code" name="p_code">FileAttributesFlags</code></a> kısmından dosyanın alabileceği özellikleri görebilirsinz. Neden FileAttributes? bağlantı hedefi mevcut değilse veya hedefe erişim verimsiz olacaksa, hedef dosya readonly ise vb. durumları belirtmek için kullanılabilir.
 					</p>
 					<p align="justify">
 						<b>CreationTime[8]: </b>UTC olarak bağlantı hedefinin oluşturulma zamanını belirten bir FILETIME yapısından türer. Değeri sıfırsa, bağlantı hedefinde oluşturulma zamanı ayarlanmamıştır.
@@ -59,7 +59,7 @@
 						<b>WriteTime[8]: </b>UTC olarak bağlantı hedefinin yazma zamanını belirten bir FILETIME yapısından türer. Değeri sıfırsa, bağlantı hedefinde ayarlanan yazma süresi yoktur.
 					</p>
 					<p align="justify">
-						<b>FileSize[4]: </b>32-bit işaretsiz tamsayı yapısına olan bu üyemiz, byte olarak hedef dosyanın boyutunu tutar. Bağlantı hedef dosyası 0xFFFFFFFF'den büyükse, bu değer hedef dosya boyutunun en az anlamlı 32 bitini belirtir.
+						<b>FileSize[4]: </b>32-bit işaretsiz tamsayı yapısına olan bu üyemiz, byte olarak hedef dosyanın boyutunu tutar. Bağlantı hedef dosyası 0xFFFFFFFF'den (4.294.967.295) büyükse, bu değer hedef dosya boyutunun en az anlamlı (LSB) 32 bitini belirtir.
 					</p>
 					<p align="justify">
 						<b>IconIndex[4]: </b>32-bit işaretli tamsayı yapısı olan bu üye, verilen iconun hangi index'te olduğunu belirtir. Peki nedir bu index? Çalıştırılabilir dosyaların (EXE, DLL gibi) kaynağında icon dosyaları gömülü bulunabilir. Hatta bir tane çalıştırılabilir dosyada birden fazla icon dosyası da bulunabilir (embeded icon in program resource). Lnk dosyası ise, hedef dosyadaki kaynakta hangi icon dosyasını kullanacağını bu index ile belirtir.
@@ -84,13 +84,6 @@
 					</p>
 					<p align="justify">
 						<b>HotKey[2]: </b>Kısayol tuşları ile başlatılan uygulamanın hangi tuşları kullandığını belirtir. Hangi tuş hangi değeri taşıdığını görmek için <a href="#HOTKEY_FLAGS"><code class="p_code" name="p_code">HOTKEY_FLAGS</code></a> başlığına bakınız.
-					</p>
-					<p>
-						<b>Reserved1[2]: </b>Bu kısım 0x0000 olmalıdır.
-					</p>
-						<b>Reserved2[4]: </b>Bu kısım 0x00000000 olmalıdır.
-					</p>
-						<b>Reserved3[4]: </b>Bu kısım 0x00000000 olmalıdır.
 					</p>
 					<p align="justify">
 						Örnek olması açısından yukarıda bahsettiğimi parser'ı kendim yazmaya karar verdim. Aşağı kısımlarda lnk_parser.py kodunu ve çıktısını görebilirsiniz.
@@ -150,7 +143,7 @@
 						Bu script'i referans alarak konunun ilerisindeki yazıları okuduktan sonra, flag'leri kontrol ettirerek tüm lnk dosyasını parse edebilen bir script yazabilirsiniz.
 					</p>
 					<p align="justify">
-						Script kaynak kodu: <b><a href="https://github.com/alipasaturhan/Shell-Link-Parser" style="text-decoration: none;">lnk_parser.py</a></b>
+						Script kaynak kodu: <b><a href="https://github.com/alipasaturhan/Shell-Link-Parser">lnk_parser.py</a></b>
 					</p>
 					<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
 						LinkTargetIDList
@@ -159,8 +152,6 @@
 						Lnk dosyasının hedefini belirtir. Bu yapı <code class="p_code" name="p_code">LINK_FLAGS</code> yapısından <code class="p_code" name="p_code">HasLinkTargetIDList</code> bitine bağlıdır. Eğer set edilmişse kullanılır, 0 ise kullanılmaz (yani isteğe bağlıdır). Bu yapının açıklamaya gerek duymadığım bir structure'ı var. Fakat ben size naçizane diyagramlarımla kısaca bahsetmeye çalışayım. Bu yapının tamamını görmek isteyen varsa <a href ="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943">MS-SHELLINK</a> official döküman pdf'ini bıraktım.
 					</p>
 					<p align="justify">
-						<!--<iframe width="100%" height="300" src="https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1#R7Zxbb5swAIV%2FTaTtIRXYhKSPa9J21VpNWrR1b5MTXEAxMQPn1l8%2FAyaB0kqTdjurSR4Cxxd8%2BYhOjiIGdJrsrzOWRncy4GJAnGA%2FoLMBIa5DJ%2FqjUA6VMnLPKyHM4sBUOgnz%2BJHXLY26iQOetyoqKYWK07a4lOs1X6qWxrJM7trVHqRoXzVlIe8I8yUTXfU%2BDlRUqRMyPunveRxG9ZVd38xvwZarMJObtbnegFCnfFXFCav7MkIesUDuGhK9HNBpJqWqjpL9lItibetlq9pdvVB6HHfG1%2BpnGjwePn39OF2k986X%2FPNitp2L8HY4MZPZMrHh9Tx8oTu8eJC6X72gbFkV%2BN83xVAvbtZ6K3IpmGInUR%2BF5rNsnKdsXcxZHUS7ddHrMC8peKcruF66r5o96cipe9ITqjprX0DL1QBrmbQuR8qN4cXUHV28i2LF52k1lZ0GWWuRSoQ%2Bc4vRqkyu%2BFQKmZWt6VX5KoYbC9HQnfJtptGsPy7ex3E0N8Xs05Zniu8bktmkay4TrrKDrmJKz72qRX0%2FkVF1vjvRWSMVNcD0jMbM%2FRAeOz4xoQ8MFs8jcvdh5spEJatvD1d%2BsMhXl8PHoQtKiPs%2FE9LB4RloXiTEdcEQIaCIEHsRoWCIUFBEqL2IjMAQ8UAR8exFZAyGyAgUkZG9iKDZVR8UEd9aRAiaXR2DIjK2FxE0uzoBRWRiLyJodhU1OTu3FxE0u1pn3HCMHLOzRfYqAtdfwwbNwhJ4bKxjhKJ5WIIay9ubuVI0E0tQc3l7Q1eK5mIJajBvb%2BpK0WwsQU3m7Y1dKZxnRY3m7c1dPTjPiprN2xu8enCeFTWctzd59eA8K2o6b2%2F06sF5VtR4%2FjiMPnrV249mY2kfvaIxMkKzsbSPXuEYQbOxtI9e4RhBs7G0j17hGEGzsbSPXuEYgfOsffSKxogP51n76BWOETjP2kevcIzAedY%2BeoVjBM6zokavx9%2B%2BffSqsUGzsV4fvaIxMkazsV43er2Z3ca5Kp8r83oW%2Fum96XfXnf7dhe%2FmmdXCa%2B3NlmUxWwj%2B9hXtQOfPM%2F9%2BC7px4dnZGcqSF7p5uJP%2BkvgTN4HvdHfA937PDujT04OYyrLG067o5Q8%3D"></iframe>-->
-
 						<iframe width="100%" height="300" src="https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1#R7Vptd5owFP41nG0f2gMCaj%2B2irVnbO1q15d9ixIhMxAW4lt%2F%2FRIIAkU9nq2Ic8I5Sp6bhHDv89yQqKJ3%2FMU1BaH3hTgQKw3VWSh6V2k0zAudfwpgmQC6LgGXIieBtAwYoFcoQVWiU%2BTAqFCREYIZCovgiAQBHLECBigl82K1McHFu4bAhSVgMAK4jD4hh3kJ2m60MrwPkeuld9aaF4llCEYTl5JpIO%2BnNHQ1PhKzD9K%2BJBB5wCHzHKRbit6hhLDkyl90IBauTd2WtOttsK7GTWHAdmnwBK8f727vrm69O%2Bt%2B8uPhB%2F52cyafMmLL1B%2FQ4e6RRUKZR1wSAGxl6FX8zFD0qvJSVscmJOSgxsGfkLGljDWYMsIhj%2FlYWuECsWfR%2FNyUpZecpbuQPceFZVoIGF3mGoniS96WNYtLabsxCVgP%2BAgLoA%2FxDDI0AtwQMUomsEMwofGD6z1VnNySuET4YaOnJRSRKR3JWq%2FL%2B%2BfbzjB8Uh%2Bj78PubIBd%2B6wtucIAdSHbEgdtRQiuM0h8yJ%2BBt6MQA4ZmxYEAyXh3VS%2BLOr%2BQgV9Pgq2jnAE8hSmZm5gJL4UgKPCj%2BWsqCBv79SyKI3zJK2hGuIhdl9r5lSu%2BB33LtnkF%2B%2BbrZ%2F7Vty671n3aOx9tcoOkbomLRabNPcTgIASxx%2Bc8GRVZVQ5ofIixIoxzuBqf8hny9VviXI1jTbxnkDK4yEHliElro20mTdKs2JZZYJ7lGM2U6vNy%2BcVQ%2Fz7I6xlm1Cl1LSf0TPZ7kno%2Bzg4cg2lC7XdOAJt1vYv%2B9T0lgG2jrEL%2FUvc9%2B%2FJ68E%2FIvqTxNYHfWfaGYdYs%2B3Jqt5SOoVz0IBVhE47nxBRsR9hHSsfkpgie3gqqTAr6jknBqDUnNLcyRz0x54CZo5lb05R63tRkYtiZTLKzO4IClqtCxuOYBm%2FYtrrnnxNQr25S6oPIRsHkIXbjTddGETv%2BucloNw5sbkq3AE7ZoppsYeyYLTYkiz3NM%2B0TCQ6BBFqrThYYFa5Aypke%2BCJRB8MoTOodeeZ%2FuypparVvRmgl955E%2F46iN3cUfbNOzZvVaT5VuvpxBigCQww%2FHb%2FMV3uMqcxr33MsLyHfL8IM%2Bqco86uWWXeUtQpXaoV9wyFN4XN%2BlNHjD35pDafWvoarMIvbyU9GIAo%2BbHxry6K%2FaUX%2FP%2FPjAN70WlXP8vHr3tFHVkt%2FpN3D5M6L2d8Sku287K8fuvUb"></iframe>
 
 					</p>
@@ -171,13 +162,13 @@
 						<b>IDListSize[2]: </b>Byte olarak IDList yapısının boyutunu tutar.
 					</p>
 					<p align="justify">
-						<b>IDList[variable]: </b>IDList yapısını tutar. İçerisinde lnk dosyasının belirttiği hedef dosyanın path'ini part part tutar. Her partta hangi dizini/dosyayı göstereceğini ayrıntılı bir şekilde gösterir (variable denemsinin sebebi IDList yapısının birden fazla olabileceğini söyler. Çünkü şimdi berlittiğimiz gibi, path'i part part gösterir). Konunun daha iyi anlaşılması için aşağıya örnek parse edilmiş targetidlist yapısını ekledim:
+						<b>IDList[variable]: </b>IDList yapısını tutar. İçerisinde lnk dosyasının belirttiği hedef dosyanın path'ini part part tutar. Her partta hangi dizini/dosyayı göstereceğini ayrıntılı bir şekilde gösterir (variable denmesinin sebebi IDList yapısının birden fazla olabileceğini söyler. Çünkü şimdi berlittiğimiz gibi, path'i part part gösterir). Konunun daha iyi anlaşılması için aşağıya örnek parse edilmiş LinkTargetIDList yapısını ekledim:
 					</p>
 					<p align="justify">
 						<img style="width: 75%" src="..\images\16_10_2022\03.PNG">
-						<!--<iframe width="100%" height="300" src="https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1#R7Zxdb9owGIV%2FDdJ2QZXYSaCXK5QOrVWnsa3b1WSIIREOpon56q%2BfkziQlFbqTaejOXBB8vrb7%2BPocC7SoYNkf5OydXQnQy46xAn3HTrsEOI6tK9%2F8sihjPjuZRlYpHFoKp0Ck%2FiJVy1NdBOHPGtUVFIKFa%2BbwZlcrfhMNWIsTeWuWW0uRXPUNVvws8BkxsR59CEOVVRG%2B6R3in%2Fm8SKqRnYDs74pmy0XqdyszHgdQp3iUxYnrOrLBLKIhXJXC9HrDh2kUqryKtkPuMj3ttq2st3oldLjvFO%2BUm9p8HT49ut%2BMF0%2FOD%2BzH9PhdiIWt92%2BWcyWiQ2v1hEI3eHVXOp%2B9YayWVkQPG7yqV6NVzoVmRRMsVNQXy3Mb9E4W7NVvmZ1EM3Wea%2FdrKDgk67geut92exZR07Vk15Q2VlzAB0uJ1iFSWM4UiSG50t3dPEuihWfrMul7DTIOhapROg7N5%2BtSuWSD6SQadGajopPPt1YiFrcKb5mGfX6vfx7nEc9KSZPW54qvq%2BFTJJuuEy4Sg%2B6iim99MoW1Xkifnm%2FO9FZIRXVwPRMjJnzsDh2fGJCXxgsXkbk7svQlYlKln%2FmoyCcZsvr7lPXBSXEtZYQ1wVDhIAiQuxFhIIhQkERofYi4oMh4oEi4tmLSA8MER8UEd9eRNDkagCKSGAtIgRNrvZAEenZiwiaXO2DItK3FxE0uYrqnF3aiwiaXK08bjhGjt7ZNG0NVzjHlcBjYx0jFE3DElRb3l7PlaKJWILqy9trulI0FUtQjXl7XVeKJmMJqjNvr%2B1K4TQrqjVvr%2B%2FqwWlWVG%2FeXuPVg9OsqOa8vc6rB6dZUd15e61XD06zotrzx2m01qtOP5qMpa31isaIjyZjaWu9wjGCJmNpa73CMYImY2lrvcIxgiZjaWu9wjECp1lb6xWNkQBOs7bWKxwjcJq1tV7hGIHTrK31CscInGZFtV6P%2F31b61VjgyZjvdZ6RWOkhyZjvXNb7TtPk3jFxHj4H238s7MZeOf7Tv%2Ftxp97VWPFk%2FHwNs7yo%2Flhy9KYTQX%2FWH%2FGvuHQkVcOHUoy87h5aZFL3iW5fnCe3MB7p%2BRm3mi%2BCZ1hNvx97%2Bx59vVxef%2FC6zsuLi4AE6CfPlUCznb7hZy8%2BXQ575cAfXt6w1NRVnuNFr3%2BCw%3D%3D"></iframe>-->
-
-
+					</p>
+					<p align="justify">
+						<img src="..\images\16_10_2022\19.gif" style="width: 75%">
 					</p>
 					<p align="justify">
 						Daha detaylı bakmak isterseniz 010 Editör'ü kurun ve plugin olarak LNK parser template indirip inceleyebilirsiniz.
@@ -187,8 +178,6 @@
 					</p>
 					<p align="justify">
 						Bu kısmı anlatmaya çok üşendim gerçekten... (Anlatmaya gerçekten gerek duysaydım anlatırdım. İsteyen varsa <a href ="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943">MS-SHELLINK</a>'ten okuyabilir) İleriki zamanlarda bu bölüm gelebilir. Takipte kalın :)
-						<!--<iframe width="100%" height="300" src="https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1#R7V1Zc%2BI4EP41eUzKBwbySDgm1DCZ1DDZzD5tKbawtTEWK4trfv1KtgW%2BCGSCj2DhqgS3ZVvq%2FvRJrZbEld6fb74QsHC%2BYQu6V5piba70wZWmqYreZf%2B4ZBtKjK4eCmyCrCjRXjBFv6G4M5IukQX9REKKsUvRIik0sedBkyZkgBC8TiabYTf51gWwYUYwNYGblT4jizqhtKt19vJ7iGxHvFlt34ZXXoD5ahO89KL3XWm6EnzCy3MgnhUJfAdYeB0T6cMrvU8wpuG3%2BaYPXa5bobbwvtGBq7t8E%2BjRU274vf3x63v%2FZfGs%2FOU%2FvQxWU9eeXKtqK3zOCrhLKAoSZJduhYqgxTQWnWJCHWxjD7jDvfQuUAPkL1LY2T7NBOMFE6pM%2BC%2BkdBuZHywpZiKHzt3oqk8JfoV97GISvFMfBR92JVvMqOQ%2BXhITvlG2bmQoCogN6ZtKiCDLCxp7R6THLxDPISVbloBAF1C0SkIHRAi0d%2Bn2VmBfIkO8wygi4wmbtF1WhLsZZlqIG6f93xKLC9d%2BoN4eS6C2FptAeeI6r6GAguswHTETNzuU8trW49nWRjyJf2NjbLsQLJB%2FY%2BI5E5s%2BSzKagTlyeVUfe6xG%2BpjpAyTeMgNmMmcHErZt%2Fv8eAguSABZRCaMMiAQZMCahtnYQhdNF%2BM41Y6hTYTVDrhuTK8ER6TGevsOPt2C4goTCzZuoia62OhETREzZik7Xe9rZyZwY5QjZ2XGm7spweZX%2FVju18gt%2BrknlFxmP2WSCvNf%2BZDoefKwycGiP8qpveGkqVBqygWZwPjA4IxiHOMEIWYElFbzAvuY9OrQ8a2tqXiW71VdJvRZVsu5Y%2BXNiUEUH7QRm0GrFDLucp6hh5ALbl9RQMDXs2onquEHJNtcj5MIepQS9LCmUICgcBO3qQZDtH%2FQJZPSDvZ9oDiUECoaAplQPgWwfoWea0PclAMoAQPV%2Bm5IdtHkmzK7S%2FmXYv3onQTFyOwJchbIPULT99Rp0BNsZ%2B4%2BZPsfMzhtp%2F6LtX4M%2BYCdj%2F6mD1308nwPPkggofOC2egR0Mwi4x%2FQr3ErjF2386rt%2Fat4YYSI%2BVK9Qzx%2BFq8Lwj7Jp9QuJDL0Dc0lsDRV%2B5GDR4Md5MKeracLJQG43HBWHnFYY5MSTmwA5RdHUlqJe81h%2B%2BKcvvoWfVrtqSJ5Gg8MBP84DSdU4HinplgpJ4zaj7hICI0yDZPsrfvI3f9iNIU4Hm%2Bjh4dk2Oqt7y3oQIscDKiJMcjygYtRrnsUu5w1gtXvg81jRz8BG48EE%2BbRqEiu%2FXWVPS5BYbkxHKZXFhDMpWaxqFmudzGLGuVksuLVHCNjGEiwwYgqLPfmRC2ItcjcFZiM1%2F%2B9Y%2BlslBd8wB3sw74ryEYrNm1940RQ79mZYUqua5yaXTK1qRt%2BSWiuhVuNkam3Xg1pvU2DuHKHWVHrhsBdMrdko0AVT6wOYFzNH%2BHPRal7woVxa7VZDqxtEfwniZN9jpMrO9pzKTwSlSirOcka7Oir%2BoK%2BejXleMNv9iJT6yFcRSdbLG20sl%2FU6Xcl6n5f1Op%2BW9bKR%2FgtmvWdMXpFnDxCRnJc7z7RkzqsmwiI57yyc1%2F20nJed23LBnNcj9nIOg%2BGIxlNe9eGYbjXhGEl5Z6G8kxf8147yjq74vyTK43OVJ9gM1ixJ1stdT1Iu64kcNQB%2BY%2F%2FJQya25FiyplU%2FlqznbUBxmcAbYdZ6PWAZIX5zHVXJ8NMaAz%2FW7A43iyklyLMl9vTqB1f05kzi%2F7H0xt4UMgsCCh8J5kuVJQZz1xGWjMHmTM568pY%2BtFQJO70G7kajJq4MAFkjj2%2Fe1Xjo1cDhaM4sAtbq9vwnH8pYmqbXwNVoVCCXuRp8kE8iL3epeMnIa0447QE%2FIsvtuQhI%2F0Jr1cC%2FOBzW8BfAO2xrASZu7WQg6VDPXosZPHx28wxefc9e5KABXMO6V8%2BIOlMHzSdgK3tZDH%2FVd%2B9bjYwn%2FCTAfJX4a1Xfy281J6Aw9MCLC8P15N8gBVb46IZj0Ki%2Bv99qTmBhgHwOQs6BfKFEwIMyvsVhWH3fv9Wc2EIEw68eXnsj7FqQSCTukFgDp6Q54YYsEuVgSAjDGvgmzQk9PHmAw%2B67NwUrOdFOa9egU9ic8MMjgTNIht4KEezxlRVyDW0Awhp0CZsTifgK4YJPcXfDrdZGmDw99ENnWUKxXX2f0GjOQGHPdfE6GCYMBgsl%2FIzqxwmN7BhNdnfGjxqkzqu8UjAYGfzIgcGAH%2BeBwQl7P%2BZuqlzcPt5G1jHdLw%2BQ1i%2FU%2Bp3qrZ%2F1B8Pp%2BYOA%2B6X9i7R%2F3lLjsu2fdcmGG0qANH8J5q%2B%2B%2BnfyQoUpq8sfej1s%2B%2BPLwdtRBOLMm0lmdn%2FstI0kuIwUaML16NFdKdycYyPIdl6oJQWlUMPPEdzVJAh8Byx4uvnGZmTi3MyYx2A6gNAb4HmYBgu1%2F2HFvwMusj2W0IUz7jS44AW6j9hHwUpufUDCinMX7K8JyXAV7GtRJ6BxxkDMLZ%2Bkcj5HlhVUKJGgF5V0d4FEemCyYJuImv1MTef4T4YYefxWIMFlXeypw27kXdx7CCw%2BZSoF0nd6mW9ASgDVhByIO2PF8V8g6mJYuX0fUoJPjpscHGdCipZqC0V87FhbqL8fKuyUYD4asec7TjDfsAV5iv8B"></iframe>-->
-
 					</p>
 					<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
 						StringData
@@ -260,10 +249,7 @@
 						<b>EXTRA_DATA_BLOCK[variable]:</b> Extra Data başlığını oluşturan asıl kısım burasıdır ve 11 bölümden oluşur. Bu başlığı lnk dosyasının bir parçası olarak görmeyiniz. Sadece bir soyutlama olarak görünüz. Aslında tablo diye bir şey yok. Yani böyle bir tabloyu byte olarak lnk dosyasının içerisinde göremeyeceksiniz. Sadece 11 adet bölümlerini görebileceksiniz (yani başlangıç offseti 11 bölümden birisi olacaktır, tablo değil), her neyse. 
 					</p>
 					<p align="justify">
-					Elbette 11 bölümün 11'ini de anlatmayacağım (evet tabiki.., belki, söz veremem :)). Ama meraklısı için tekrardan official <a href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943">MS-SHELLINK</a> dökümantasyonunu buraya bırakıyorum. 
-					</p>
-					<p align="justify">
-						<b>TERMINAL_BLOCK[4]:</b> Extra Data segmentinin bitişini belirtir. Bu kısmın saçma bir şekilde 0x4'ten küçük herhangi bir değerde olma zorunluluğu var (güya öyle. Ah MS ah..). Aşağıda ExtraData yapısını görebilirsiniz.
+						<b>TERMINAL_BLOCK[4]:</b> Extra Data segmentinin bitişini belirtir. Bu kısmın saçma bir şekilde 0x4'ten küçük herhangi bir değerde olma zorunluluğu var (güya öyle, ah MSDN ah..). Aşağıda ExtraData yapısını görebilirsiniz.
 					</p>
 					<p align="justify">
 						Aşağıda ExtraData Tablosunun bölümleri kısaca açıklanmıştır. Önemli olan başlıklar detaylı bir şekilde üzerinde durulmaya çalışılmıştır.
@@ -457,14 +443,13 @@
 					</p>
 					<p align="justify">
 <table cellspacing="0" style="margin: auto">
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_READONLY</td><td style="padding: 5;text-align: center;border-right-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA-->AAAAAAAA</td></tr>
-	<tr><td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_HIDDEN</td><td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_SYSTEM<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_VOLUME_LABEL<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_DIRECTORY<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_ARCHIVE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_READONLY</td><td style="padding: 5;text-align: center;border-right-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Dosya için verilmişse sadece okunabilir ayarı (içerik değiştirilemez), klasör için verilmişse o klasörde bir dosya silinemez/eklenemez</td></tr>
+	<tr><td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_HIDDEN</td><td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Dosya veya klasör gizli olarak ayarlanmıştır</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_SYSTEM<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Dosya veya klasör işletim sisteminin parçası veya işletim sistemi tarafından kullanılıyor</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_DIRECTORY<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Bir klasör olduğunu belirtir</td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_ARCHIVE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Uygulamalar dosyaları veya klasörleri yedekleme ve silme işlemi için bu biti kullanır</td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_NORMAL<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
-	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_TEMPORARY<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0" align="justify"><!--AAAAAAAA--></td></tr>
+	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_TEMPORARY<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0" align="justify">Dosya geçici depolama için kullanılıyor. Genelde temp klasörü içindekiler bu bite sahiptir</td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_SPARSE_FILE<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_REPARSE_POINT<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
 	<tr><td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">FILE_ATTRIBUTE_COMPRESSED<td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0"><!--AAAAAAAA--></td></tr>
