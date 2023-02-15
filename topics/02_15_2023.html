@@ -1,0 +1,669 @@
+<html>
+	<head>
+		<title>Windows Objeler ve Handle'lar</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="..\styles\styles_topics.css">
+	</head>
+	<body style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('..\\images\\02_15_2023\\bg.PNG');">
+		<br><br><br><br><br>
+		<center>
+		<div class="topic_subject" name="topic_subject">
+			Windows Objeler ve Handle'lar
+		</div></center>
+		<br><br><br>
+		<div style="margin-top: 55px;height:2px;width:100%; background-color:white" class="hr" name="hr"></div>
+			<div style="background-color: #101010; padding: 10px">
+					<div class="topic_content" name="topic_content">
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Objeler ve Handle'lar: Arasındaki İlişki
+						</p>
+						<p align="justify">
+							Windows nesneler kümesinden oluşan bir işletim sistemidir. Object, bir sistem kaynağını (resource) temsil eden bir data structure’dır. Uygulamalar, object data’larına veya bir object’in temsil ettiği sistem kaynağına doğrudan erişemez. Uygulamaların sistem kaynağını incelemek veya değiştirmek için kullanabileceği bir object handle edinmesi gerekir. Yani Bir process, object’i kullanmadan önce o object’in handle’ına sahip olmalıdır. Çünkü handle’lar (yalnızca) hedef object’lerin türünü/bellekteki adresini belirlemeye yardımcı olur.
+						</p>
+						<p align="justify">
+							Her handle'ın sistem tarafından tutulan bir tabloda bir girişi bulunur ve bu giriş handle'ın ilişkili olduğu objenin adresini, objenin türünü, handle'ın erişim haklarını ve diğer özelliklerini belirler. Bu tabloya "Object Table" denir ve Windows işletim sistemi tarafından yönetilir. Object Table, Windows işletim sistemi tarafından yönetilen bir veri yapısıdır ve normal kullanıcılar tarafından direk olarak görüntülenemez. Ancak, Windows API'leri veya benzer araçlar kullanarak, bu veri yapısındaki bilgilerin bir kısmına erişmek mümkün olabilir.
+						</p>
+						<p align="justify">
+							Ek olarak; bir process aynı anda en fazla 16.000.000 handle’a sahip olabilir. 
+						</p>
+						<p align="justify" class="notes">
+							Bu kaynaklar; sistem veya uygulama tarafından kullanılan bellek alanı, disk alanı, network bağlantıları vb. temsil eder. Örneğin, bir file objesi bellekteki bir dosya sistemine ait bir dosyayı temsil eder ve bu objeyi kullanan bir uygulamanın dosyaya erişebilmesini ve içeriğini okuyabilmesini veya değiştirebilmesini sağlar. 
+						</p>
+
+						<p align="justify">
+							Sistem, iki ana nedenden dolayı sistem kaynaklarına erişimi düzenlemek için object’leri ve handle’ları kullanır:
+						</p>
+
+						<p align="justify">
+							<ul>
+								<li>
+									Object’lerin kullanımı, Microsoft'un sistemi kolayca güncelleyebilmesini sağlar. Microsoft, Windows’un sonraki sürümlerini yayınladığında, güncellenen object’i çok az veya hiç ek çalışma olmadan yayınlamak.
+								</li>
+								<li>
+									Windows güvenliğinden yararlanmanızı sağlar. Her object’in kendi Access Control Lists’i (ACL) vardır. Bir uygulama object için her handle oluşturduğunda, sistem (Object Manager) bir object’in ACL'sini inceler. Ayrıca bir process, object üzerinde gerçekleştirebileceği eylemleri görmek için bu listeye bakar.
+								</li>
+							</ul>
+						</p>
+						<p align="justify">
+							Özet olarak objeler ve handle'lar, Windows işletim sistemi tarafından yönetilen bellekteki nesneleri yönetme, saklama, paylaşma, iletişim ve erişme işlemlerini kolaylaştırmak için kullanılır.
+						</p>
+						<p align="justify">
+							Windows, objeler için aşağıdaki görevleri gerçekleştiren işlevler sağlar:
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Object Manager
+						</p>
+						<p align="justify">
+							Bir object, standart bir header ve object’e özgü özelliklerden oluşur. Tüm object’ler aynı struct’a sahip olduğundan, Windows'ta tüm nesneleri koruyan tek bir nesne yöneticisi vardır. 
+						</p>
+						<p align="justify">
+							Object header, diğer process’lerin objeye adıyla başvurabilmesi için obje adı ve object manager’in sistem kaynağına hangi işlemlerin erişeceğini kontrol edebilmesi için bir güvenlik tanımlayıcısı gibi öğeler içerir. Ayrıca referans sayımı aracılığıyla hangi nesnelerin kullanımda olduğunun kaydını tutar (buradaki referans: handle’dır).
+						</p>
+						<p align="justify" class="notes">
+							Her objenin bir referans sayıcı vardır ve her objeye erişen işlem, objenin referans sayısını bir arttırır. Eşzamanlı olarak, objeyi kullanmaktan vazgeçildiğinde, objenin referans sayısı bir azaltılır. Bu sistem, Windows işletim sistemi tarafından yönetilen objelerin bellek yönetimini düzenlemek için kullanılır. Bir objenin referans sayısı 0 olduğunda, Object Manager objeyi bellekten tamamen kaldırabilir, çünkü artık kullanılmayan bir objedir. Ve bir önceki başlıktaki ifadeyi unutmayalım: “Bir process sona erdiğinde, sistem otomatik olarak handle’ları kapatır ve process tarafından oluşturulan objeleri bellekten siler.” Bu işlem güvenli bellek yönetimi içindir.
+						</p>
+						<p align="justify">
+							Object Manager’ın gerçekleştirdiği görevler şunları içerir:
+						</p>
+						<p align="justify">
+							<ul>
+								<li>
+									Creating objects (Obje oluşturma)
+								</li>
+								<li>
+									Verifying that a process has the right to use the object (Process’in objeye erişim yetkilerini doğrulama)
+								</li>
+								<li>
+									Creating object handles and returning them to the caller (Bir obje için handle oluşturma ve return etme)
+								</li>
+								<li>
+									Maintaining resource quotas
+								</li>
+								<li>
+									Creating duplicate handles
+								</li>
+								<li>
+									Closing handles to objects
+								</li>
+							</ul>
+						</p>
+						<p align="justify">
+							Windows kernel’ı, kullanıcı modu process’leri tarafından kullanılmak üzere çeşitli nesne türleri tasarlanmıştır. Bu objelerin data structur’ları kernel space’te saklanır. Object Manager (internal adı “Ob”) windows kaynaklarını yöneten windows subsystem’idir. Kaynakları temsil eden tüm objelerin bir Object Type özelliği ve kaynakla ilgili diğer meta data’ları vardır. Tüm objeleri görmek için sysinternals paketindeki WinObj.exe aracını inceleyin.
+						</p>
+						<p align="justify" class="notes">
+							Object Manager direk olarak görülemez. Object Manager, Windows işletim sistemi tarafından yürütülen bir sistem yapı parçasıdır ve kullanıcılar tarafından doğrudan erişilemez.
+						</p>
+						<p align="justify">
+							<ul>
+								<li>
+									Creating an object (Obje oluşturulabilir)
+								</li>
+								<li>
+									Get an object handle (Objeyi temsil eden handle elde edilebilir)
+								</li>
+								<li>
+									Get information about the object (Obje hakkında bilgi getirilebilir)
+								</li>
+								<li>
+									Set information about the object (Objenin bilgileri değiştirilebilir)
+								</li>
+								<li>
+									Close the object handle (Objeyi temsil eden handle’ı kapatılabilir)
+								</li>
+								<li>
+									Destroy the object (Obje silinebilir)
+								</li>
+							</ul>
+						</p>
+						<p align="justify">
+							Handle’lar ve object’ler belleği tüketir. Bu nedenle, sistem performansını korumak için handle’ları kapatmalı ve artık ihtiyaç duyulmayan object’leri silmelisiniz. Bunu yapmazsanız, disk belleği dosyasının aşırı kullanımı nedeniyle uygulamanız sistem performansına zarar verebilir.
+						</p>
+						<p align="justify">
+							Bir process sona erdiğinde, sistem otomatik olarak handle’ları kapatır ve process tarafından oluşturulan objeleri bellekten siler. Fakat bir thread sona erdiğinde, sistem genellikle handle’ları kapatmaz veya object’leri silmez. Tek istisna; window, hook, window position ve dynamic data exchange (DDE) conversation object’leri silinir. <u>Handle'lar dinamik olarak oluşturulabilir ve yok edilebilir, ancak bir objenin yok edilmesi handle'ın otomatik olarak yok edilmesine neden olmaz. Uygulamalar, handle'ları kapatmak zorundadır</u> ve böylece objeyi kullanmayan son handle'ın yok edilmesi ile objenin bellekteki yerini geri alması mümkün olur.
+						</p>
+						<p align="justify">
+							Handle oluşturma ve handle’lardan object’lerin çözümlenmesine yalnızca Object Manager aracılık eder.
+						</p>
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Object Interface
+						</p>
+						<p align="justify">
+							Object Interface, farklı uygulamalar arasında veri ve nesnelerin paylaşımını ve etkileşimini sağlayan bir teknolojidir.
+						</p>
+						<p align="justify">
+							Object Interface, uygulamalar arasında veri ve nesnelerin düzenli olarak paylaşılmasını sağlar ve bu nesneleri bir belgede birleştirmek için kullanılır. Object Interface, OLE (Object Linking and Embedding) teknolojisi tarafından desteklenir ve Windows işletim sistemi içinde bu teknolojinin kullanımına olanak tanır.
+						</p>
+						<p align="justify">
+							Object Interface, uygulamalar arasındaki veri ve nesnelerin etkileşimini sağlamak için OLE objeleri kullanır. Bu objeler, verilerin görüntülenmesi, güncellenmesi ve farklı uygulamalar arasındaki veri etkileşimi yapması gerektiğinde kullanılır.
+						</p>
+						<p align="justify">
+							Windows API'si, Object Interface teknolojisini kullanmak isteyen uygulamalar için gerekli fonksiyonları sunar. Bu fonksiyonlar, OLE objelerinin oluşturulması, yapılandırılması ve belge içinde görüntülenmesi gibi işlemler için kullanılabilir.
+						</p>
+
+						<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+							Handle Limitations
+						</p>
+						<p align="justify">
+							Bazı objeler aynı anda yalnızca bir handle’ı destekler. Diğer objeler, tek bir obje için birden çok handle’ı destekler. İşletim sistemi, objenin son handle’ı kapatıldıktan sonra objeyi bellekten otomatik olarak kaldırır. Neden kaldırır? Hatırlayalım; “Eğer bir objenin referans sayısı 0 olduğunda, Object Manager objeyi bellekten tamamen kaldırabilir, çünkü artık kullanılmayan bir objedir.”
+						</p>
+						<p align="justify">
+							Sistemdeki toplam açık handle sayısı, kullanılabilir bellek miktarıyla sınırlıdır. Bazı obje türleri, session veya process başına sınırlı sayıda handle’ı destekler. İlk başlıkta ifade edilen “Ek olarak; bir process aynı anda en fazla 16.000.000 handle’a sahip olabilir.” Process için geçerlidir. Bu sınırlama, işletim sistemindeki bellek ve kaynakların yönetimi için gereklidir ve farklı uygulamaların aynı anda fazla bellek ve kaynak kullanmasını önlemek amacıyla uygulanır. Yani her bir uygulama için, bellekteki nesneler için belirli bir sayıda handle verilir ve bu handle’lar, uygulamanın bellekteki objelere erişmesini sağlar. Eğer uygulama, verilen handle sayısını aşarsa, işletim sistemi tarafından "handle is out of range" (işaretçi aralık dışında) hatası verilir ve uygulamanın bellekteki objelere erişimi engellenir. Bu nedenle, uygulama yazarları, handle sınırlamalarını göz önünde bulundurmalı ve bellek yönetimine uygun olarak işletmeleri gereken handle'ları tasarlamalıdır.
+						</p>
+						<p align="justify">
+							Aşağıdaki kodları kendi derleyicinizde denerseniz, belirtilen pid’de kaç adet handle’ın açık olduğunu ve bu handle’ların bellekte ne kadar yer kapladığını görebilirsiniz: 
+						</p>
+						<!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;windows.h&gt;</span>
+<span style="color: #75715e">#include &lt;iostream&gt;</span>
+<span style="color: #75715e">#include &lt;psapi.h&gt;</span>
+
+<span style="color: #66d9ef">int</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">DWORD</span> <span style="color: #f8f8f2">processId</span> <span style="color: #f92672">=</span> <span style="color: #ae81ff">14388</span><span style="color: #f8f8f2">;</span> <span style="color: #75715e">// replace with the actual process ID</span>
+	<span style="color: #f8f8f2">HANDLE</span> <span style="color: #f8f8f2">hProcess</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">OpenProcess(PROCESS_QUERY_INFORMATION</span> <span style="color: #f92672">|</span> <span style="color: #f8f8f2">PROCESS_VM_READ,</span> <span style="color: #f8f8f2">FALSE,</span> <span style="color: #f8f8f2">processId);</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(hProcess</span> <span style="color: #f92672">==</span> <span style="color: #f8f8f2">NULL)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;Failed to open process. Error code: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">GetLastError()</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #f8f8f2">DWORD</span> <span style="color: #f8f8f2">dwHandleCount</span> <span style="color: #f92672">=</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">BOOL</span> <span style="color: #f8f8f2">result</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">GetProcessHandleCount(hProcess,</span> <span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">dwHandleCount);</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(</span><span style="color: #f92672">!</span><span style="color: #f8f8f2">result)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;Failed to get handle count. Error code: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">GetLastError()</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+		<span style="color: #f8f8f2">CloseHandle(hProcess);</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #f8f8f2">PROCESS_MEMORY_COUNTERS</span> <span style="color: #f8f8f2">memCounters;</span>
+	<span style="color: #f8f8f2">result</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">GetProcessMemoryInfo(hProcess,</span> <span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">memCounters,</span> <span style="color: #66d9ef">sizeof</span><span style="color: #f8f8f2">(memCounters));</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(</span><span style="color: #f92672">!</span><span style="color: #f8f8f2">result)</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;Failed to get process memory info. Error code: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">GetLastError()</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+		<span style="color: #f8f8f2">CloseHandle(hProcess);</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #f8f8f2">CloseHandle(hProcess);</span>
+
+	<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;Current handle count: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">dwHandleCount</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+	<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;Memory used by handles: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">memCounters.WorkingSetSize</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot; Kb&quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+
+	<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+
+					<p align="justify">
+						Windows sürümlerinde handle limiti varsayılan olarak belirli bir değere ayarlanır ve genellikle bu limit görüntülenemez. Bu varsayıılan limit değeri, windows, sürüm ve sistem yapılandırmasına göre değişebilir.
+					</p>
+
+					<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+						Obje Kategorileri
+					</p>
+					<p align="justify">
+						Aşağıda kategorilerine göre objeler verilmiştir. Tüm objeleri görebilmek için: <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/object-categories">https://learn.microsoft.com/en-us/windows/win32/sysinfo/object-categories</a>
+					</p>
+					<p align="justify">
+						Üç çeşit objeler kümesi vardır.
+					</p>
+					<p align="justify">
+						<ul>
+							<li>
+								User Objects
+							</li>
+							<li>
+								GDI Objects
+							</li>
+							<li>
+								Kernel Objects
+							</li>
+						</ul>
+					</p>
+
+					<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+						Kernel Objects
+					</p>
+					<p align="justify">
+						Kernel tarafında çalışan objeler, işletim sistemi tarafından yönetilir ve sistem kaynaklarını yönetmek için kullanılır. Çekirdek objeleri, user modu koduna maruz kalmaz, ancak çekirdek koduyla sınırlandırılır. Madem bu objeler user modu koduna maruz kalmaz, nasıl olur da bir kullanıcılar kernel objeleri oluşturabiliyoruz/kullanabiliyoruz? 
+					</p>
+					<p align="justify">
+						Windows, kullanıcıların program geliştirebilmesi için api’ler çıkarmıştır. Fakat bu windows api fonksyonlarını kullandığımızda, aslında başka bir fonksiyon çağrılarak bize sonuçlar getirilir. Yani ortada function forwarding olayı var. Windows api fonksiyonların birleşimi olan “Windows.h” kütüphanesini biliyorsunuz. Bu kütüphaneden bir fonksiyon kullandığımızda/çağırdığmızda, aslında ntdll.dll adında bir dll dosyasındaki export edilmiş fonksiyonları çağırmış oluyoruz. Ntdll.dll dosyası ise, user modu ile kernel modu arasındaki köprü görevini görür. Bu sayede aslında user modunda verilen komut ntdll.dll fonksiyonları sayesinde kernelde işletilir.
+					</p>
+					<p align="justify">
+							<img class="other_img" name="other_img" style="width:75%" src="..\images\02_15_2023\01.jpg">
+					</p>
+					<p align="justify">
+						Bu konunun devamı Process’ler kısmında detaylı bir şekilde anlatılmıştır. Konudan çok sapmamak üzere kernel objelerinin özelliklerine. Kernel objelerinin handle’ları process’lere özeldir. Yani kernel objelerin handle’larına erişmek için bir process’in ya kernel objesini oluşturarak return edilen handle’ı alması, ya da varolan kernel objesinin handle’ını alması gerek. Herhangi bir process, varolan bir kernel objesinin ismini ve gerekli erişimleri sağlıyorsa, o obje için yeni bir handle oluşturaiblir. Her kernel objesi, kendi erişim haklarını barındırır. Örneğin, event handle’lar “set” veya “wait” erişimine (veya her ikisine) sahip olabilir, file handle’lar “read” veya “write” erişimine (veya her ikisine birden) sahip olabilir. Tüm kernel objelerinin erişim haklarını görüntülemek için: <a href="https://learn.microsoft.com/en-us/windows/win32/secauthz/securable-objects">https://learn.microsoft.com/en-us/windows/win32/secauthz/securable-objects</a>
+					</p>
+					<p align="justify">
+						Bir uygulama, bir kernel objesi olan event objesini oluşturma senaryosu aşağıdaki gibi yapar:
+					</p>
+					<p align="justify">
+							<img class="other_img" name="other_img" style="width:50%" src="..\images\02_15_2023\02.png">
+					</p>
+					<p align="justify">
+						Burada “CreateEvent” fonksiyonu, Event objesini oluşturup handle’ını return ediyor. Bu handle sayesinde, event objesi üzerinde “set” veya “wait” işlemleri yapılabilir. Çoğu kernel objesi, tek bir obje için multi handle destekler. Aşağıdaki şekli inceleyelim:
+					</p>
+					<p align="justify">
+							<img class="other_img" name="other_img" style="width:50%" src="..\images\02_15_2023\03.png">
+					</p>
+					<p align="justify">
+						Yukarıdaki diyagramda da gösterildiği gibi “OpenEvent” fonksiyonu kullanılarak ek bir event obje handle’ı uygulama tarafından alınabilir. Ayrıca bu yöntemde iki handle’ın farklı erişim yetkilerinde oluşumu sağlanabilir. Örneğin ilk handle hem set hem de wait’e sahip olurken, diğer oluşan handle sadece wait’e sahip olabilir. Bunu yapan bir C++ kodunu aşağıda inceleyebilirsiniz:
+					</p>
+					<!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;Windows.h&gt;</span>
+<span style="color: #75715e">#include &lt;iostream&gt;</span>
+
+<span style="color: #66d9ef">int</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">HANDLE</span> <span style="color: #f8f8f2">hEvent</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">CreateEvent(NULL,</span> <span style="color: #f8f8f2">TRUE,</span> <span style="color: #f8f8f2">FALSE,</span> <span style="color: #f8f8f2">TEXT(</span><span style="color: #e6db74">&quot;MyEvent&quot;</span><span style="color: #f8f8f2">));</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(hEvent</span> <span style="color: #f92672">==</span> <span style="color: #f8f8f2">NULL)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;CreateEvent failed with error code: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">GetLastError()</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #f8f8f2">HANDLE</span> <span style="color: #f8f8f2">hEventWaitOnly</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">OpenEvent(EVENT_MODIFY_STATE</span> <span style="color: #f92672">|</span> <span style="color: #f8f8f2">SYNCHRONIZE,</span> <span style="color: #f8f8f2">FALSE,</span> <span style="color: #f8f8f2">TEXT(</span><span style="color: #e6db74">&quot;MyEvent&quot;</span><span style="color: #f8f8f2">));</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(hEventWaitOnly</span> <span style="color: #f92672">==</span> <span style="color: #f8f8f2">NULL)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;OpenEvent failed with error code: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">GetLastError()</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;Event object successfully created and opened with wait permission&quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span> 
+</pre></div>
+					<p align="justify">
+						Aşağıdaki örnek kod ise DuplicateHandle fonksiyonu ile bir event handle’ını çoğaltmayı sağlıyor:
+					</p>
+					<!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;windows.h&gt;</span>
+<span style="color: #75715e">#include &lt;iostream&gt;</span>
+
+<span style="color: #66d9ef">int</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">HANDLE</span> <span style="color: #f8f8f2">hEvent</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">CreateEvent(NULL,</span> <span style="color: #f8f8f2">TRUE,</span> <span style="color: #f8f8f2">FALSE,</span> <span style="color: #f8f8f2">NULL);</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(hEvent</span> <span style="color: #f92672">==</span> <span style="color: #f8f8f2">NULL)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cerr</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;CreateEvent failed, error code: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">GetLastError()</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #f8f8f2">HANDLE</span> <span style="color: #f8f8f2">hEventWaitOnly</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">NULL;</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(</span><span style="color: #f92672">!</span><span style="color: #f8f8f2">DuplicateHandle(GetCurrentProcess(),</span> <span style="color: #f8f8f2">hEvent,</span> <span style="color: #f8f8f2">GetCurrentProcess(),</span> <span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">hEventWaitOnly,</span>
+		<span style="color: #f8f8f2">SYNCHRONIZE,</span> <span style="color: #f8f8f2">FALSE,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">))</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cerr</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;DuplicateHandle failed, error code: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">GetLastError()</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+		<span style="color: #f8f8f2">CloseHandle(hEvent);</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #f8f8f2">CloseHandle(hEvent);</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(WaitForSingleObject(hEventWaitOnly,</span> <span style="color: #f8f8f2">INFINITE)</span> <span style="color: #f92672">==</span> <span style="color: #f8f8f2">WAIT_FAILED)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cerr</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;WaitForSingleObject failed, error code: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">GetLastError()</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+		<span style="color: #f8f8f2">CloseHandle(hEventWaitOnly);</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">}</span>
+
+	<span style="color: #f8f8f2">CloseHandle(hEventWaitOnly);</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+					<p align="justify">
+						Bir obje, en az bir handle’a sahip olduğu sürece bellekte kalır. Yukarıda bahsedilen konu başlığını hatırlayalım “Bir objenin referans sayısı 0 olduğunda, Object Manager objeyi bellekten tamamen kaldırabilir, çünkü artık kullanılmayan bir objedir.”
+					</p>
+					<p align="justify">
+						<img class="other_img" name="other_img" style="width:50%" src="..\images\02_15_2023\04.png">
+					</p>
+					<p align="justify">
+						Ek bilgi olarak; File objesi diğer kernel objelerinden biraz farklıdır. Kernel objelerine tek tek ilerde değinilecektir fakat bunu şimdiden bir preview olarak görebilirsiniz. 
+					</p>
+					<p align="justify">
+						Tüm kernel objelerini manage etmeye yarayan fonksiyonları görebilmek için: <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/kernel-objects">https://learn.microsoft.com/en-us/windows/win32/sysinfo/kernel-objects</a>
+					</p>
+					<p align="justify">
+						Kernel object namespaces: <a href="https://learn.microsoft.com/en-us/windows/win32/termserv/kernel-object-namespaces">https://learn.microsoft.com/en-us/windows/win32/termserv/kernel-object-namespaces</a>
+					</p>
+
+					<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+						User Objects
+					</p>
+					<p align="justify">
+						Kullanıcı tarafında çalışan objeler ise, kullanıcı tarafından yönetilir ve kullanıcılar tarafından doğrudan erişilebilir. Kullanıcı tarafındaki objeler, obje başına yalnızca bir handle destekler (Handle Limitations: “Bazı objeler aynı anda yalnızca bir handle’ı destekler”). Bir oturumunda teorik olarak 65536 adet user handle olabilir. 
+					</p>
+					<p align="justify" class="notes">
+						Kullanıcı handle’larının process başına varsayılan bir sınırı vardır. Bu sınırı görmek veya editlemek için: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsNT\CurrentVersion\Windows\USERProcessHandleQuota
+					</p>
+					<p align="justify">
+						User objeleri tüm process’ler tarafından erişilebilir. Bu da demek oluyor herhangi bir process, bir user objesinin handle’ını güenlik erişimi olması koşuluyla kullanabilir. Bir uygulama, aşağıdaki gibi window object oluşturur:
+					</p>
+					<p align="justify">
+						<img class="other_img" name="other_img" style="width:50%" src="..\images\02_15_2023\05.png">
+					</p>
+					<p align="justify">
+						Burada “CreateWindow” fonksiyonu, bir user objesi olan Window objesini oluşturup handle’ını return ediyor.
+					</p>
+					<p align="justify" class="notes">
+						“Virtual addresses space” bir process’in hafızasıdır. Bu kavram “Process’ler” kısmında değinilecektir.
+					</p>
+					<p align="justify">
+						3. adımdan sonra artık uygulamamız return edilen handle sayesinde Window objesini kullanabilir, üzerinde değişiklikler sağlayabilir. Handle, window objesi yok edilene kadar geçerli kalır, fakat memory’den silinmez.
+					</p>
+					<p align="justify">
+						Bir user objesi olan Window objesinin oluşumundan sonra yok edilme süreci vardır. Bu süreç aşağıdaki gibidir:
+					</p>
+					<p align="justify">
+						<img class="other_img" name="other_img" style="width:50%" src="..\images\02_15_2023\06.png">
+					</p>
+					<p align="justify">
+						Burada ise oluşturulan Window objesinin “DestroyWindow” fonksiyonu ile bellekten silinme süreci vardır. 3. Adımda obje silinir fakat handle hala bellekte kalır. Handle’ı sonlandırmak için CloseHandle fonksiyonu kullanılır.
+					</p>
+					<p align="justify">
+						Tüm user objelerini manage etmeye yarayan fonksiyonları görmek için: <a href="Tüm user objelerini manage etmeye yarayan fonksiyonları görmek için: https://learn.microsoft.com/en-us/windows/win32/sysinfo/user-objects#managing-user-objects">https://learn.microsoft.com/en-us/windows/win32/sysinfo/user-objects#managing-user-objects</a>
+					</p>
+					<p align="justify">
+						Örnek olarak bir window objesi oluşturalım ve daha sonra destroy ederek return edilen handle’ını kapatalım.
+					</p>
+					<!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;Windows.h&gt;</span>
+
+<span style="color: #f8f8f2">LRESULT</span> <span style="color: #f8f8f2">CALLBACK</span> <span style="color: #a6e22e">WndProc</span><span style="color: #f8f8f2">(HWND</span> <span style="color: #f8f8f2">hWnd,</span> <span style="color: #f8f8f2">UINT</span> <span style="color: #f8f8f2">msg,</span> <span style="color: #f8f8f2">WPARAM</span> <span style="color: #f8f8f2">wParam,</span> <span style="color: #f8f8f2">LPARAM</span> <span style="color: #f8f8f2">lParam)</span>
+<span style="color: #f8f8f2">{</span>
+	<span style="color: #66d9ef">switch</span> <span style="color: #f8f8f2">(msg)</span>
+	<span style="color: #f8f8f2">{</span>
+	<span style="color: #66d9ef">case</span> <span style="color: #f8f8f2">WM_CLOSE</span>:
+		<span style="color: #f8f8f2">DestroyWindow(hWnd);</span>
+		<span style="color: #66d9ef">break</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #f8f8f2">default:</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">DefWindowProc(hWnd,</span> <span style="color: #f8f8f2">msg,</span> <span style="color: #f8f8f2">wParam,</span> <span style="color: #f8f8f2">lParam);</span>
+	<span style="color: #f8f8f2">}</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span>
+
+<span style="color: #66d9ef">int</span> <span style="color: #f8f8f2">WINAPI</span> <span style="color: #a6e22e">WinMain</span><span style="color: #f8f8f2">(HINSTANCE</span> <span style="color: #f8f8f2">hInstance,</span> <span style="color: #f8f8f2">HINSTANCE,</span> <span style="color: #f8f8f2">LPSTR,</span> <span style="color: #66d9ef">int</span><span style="color: #f8f8f2">)</span>
+<span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">WNDCLASSEX</span> <span style="color: #f8f8f2">wcex</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">sizeof</span><span style="color: #f8f8f2">(WNDCLASSEX)</span> <span style="color: #f8f8f2">};</span>
+	<span style="color: #f8f8f2">wcex.style</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">CS_HREDRAW</span> <span style="color: #f92672">|</span> <span style="color: #f8f8f2">CS_VREDRAW;</span>
+	<span style="color: #f8f8f2">wcex.lpfnWndProc</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">WndProc;</span>
+	<span style="color: #f8f8f2">wcex.hInstance</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">hInstance;</span>
+	<span style="color: #f8f8f2">wcex.hCursor</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">LoadCursor(NULL,</span> <span style="color: #f8f8f2">IDC_ARROW);</span>
+	<span style="color: #f8f8f2">wcex.hbrBackground</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">(HBRUSH)(COLOR_WINDOW</span> <span style="color: #f92672">+</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">);</span>
+	<span style="color: #f8f8f2">wcex.lpszClassName</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">L&quot;MyWindowClass&quot;</span><span style="color: #f8f8f2">;</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(</span><span style="color: #f92672">!</span><span style="color: #f8f8f2">RegisterClassEx(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">wcex))</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+
+	<span style="color: #f8f8f2">HWND</span> <span style="color: #f8f8f2">hWnd</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">CreateWindow(</span><span style="color: #e6db74">L&quot;MyWindowClass&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">L&quot;My Window&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">WS_OVERLAPPEDWINDOW,</span>
+		<span style="color: #f8f8f2">CW_USEDEFAULT,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">CW_USEDEFAULT,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">NULL,</span> <span style="color: #f8f8f2">NULL,</span> <span style="color: #f8f8f2">hInstance,</span> <span style="color: #f8f8f2">NULL);</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(</span><span style="color: #f92672">!</span><span style="color: #f8f8f2">hWnd)</span>
+		<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+
+	<span style="color: #f8f8f2">ShowWindow(hWnd,</span> <span style="color: #f8f8f2">SW_SHOWNORMAL);</span>
+	<span style="color: #f8f8f2">UpdateWindow(hWnd);</span>
+
+	<span style="color: #f8f8f2">MSG</span> <span style="color: #f8f8f2">msg;</span>
+	<span style="color: #66d9ef">while</span> <span style="color: #f8f8f2">(GetMessage(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">msg,</span> <span style="color: #f8f8f2">NULL,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">))</span>
+	<span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">TranslateMessage(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">msg);</span>
+		<span style="color: #f8f8f2">DispatchMessage(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">msg);</span>
+	<span style="color: #f8f8f2">}</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">(</span><span style="color: #66d9ef">int</span><span style="color: #f8f8f2">)msg.wParam;</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+					<p align="justify" class="notes">
+						Eğer bir console uygulamasında çalışıyorsanız ana fonksiyonun ismini “main” olarak değiştirin ve “WINAPI” belirtecini kaldırın. Fakat C++ Desktop Uygulaması geliştiriyorsanız (bu örnek için önerilir) buna gerek yok.
+					</p>
+
+					<p class="topic_sub_subject" name="topic_sub_subject" align="justify">
+						Handle Management İçin Fonksiyonlar (handleapi.h)
+					</p>
+					<p align="justify">
+						Öncelikle bu fonksiyonları anlayabilmek için parametrelerine bakmamız gerekli, parametrelerini anlayabilmemiz için; SAL yani Source Code Annotation Language yani Kaynak Kodu Ek Açıklama Dili’ni öğrenmeliyiz. Aşağıdaki tablo yardımıyla çok kısa ve hızlı bir bilgi verilmiştir:
+					</p>
+					<table cellspacing="0" style="margin: auto">
+					  <tbody>
+					    <tr>
+					      <td style="padding: 5;text-align: center;border-right-style:solid; border-color: #DEDEDE;border-width:1">_In_</td>
+					      <td style="padding: 5;text-align: center;border-right-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Çağrılan fonksiyona veri iletilir ve readonly modundadır</td>
+					    </tr>
+					    <tr>
+					      <td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">_Inout_</td>
+					      <td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Çağrılan fonksiyona kullanılabilir veriler aktarılır ve read and write modundadır</td>
+					    </tr>
+					    <tr>
+					      <td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">_Out_</td>
+					      <td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Çağrılan fonksiyon verileri bu boşluğa yazar. Gelen veriye sadece yazma işlemi yapar</td>
+					    </tr>
+					    <tr>
+					      <td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">_Outptr_</td>
+					      <td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Çağrılan fonksiyon tarafından return edilen değer bir pointer’dır</td>
+					    </tr>
+					    <tr>
+					      <td style="padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1">_Opt_</td>
+					      <td style="padding: 5;text-align: center;padding: 5;text-align: center;border-right-style:solid; border-top-style:solid; border-color: #DEDEDE;border-width:1;border-right-width: 0">Çağrılan fonksiyon isteğe bağlı veri girişi aktarılır</td>
+					    </tr>
+					  </tbody>
+					</table>
+					<p align="justify">
+						Bu konuyla daha fazla bilgi sahibi olmak isteyenler şu adrese bakabilirler: <a href="https://learn.microsoft.com/en-us/cpp/code-quality/understanding-sal?view=msvc-170#sal-basics">https://learn.microsoft.com/en-us/cpp/code-quality/understanding-sal?view=msvc-170#sal-basics</a>
+					</p>
+					<p align="justify">
+						<ul>
+							<li>
+								<code class="p_code" name="p_code">DuplicateHandle</code>
+							</li>
+							<p align="justify" style="margin: 0; padding: 0;">
+								<ul style="list-style: none;">
+									<li>
+										<first style="color: purple;">_In_</first> <second style="color: aqua;">HANDLE</second> <third style="color: grey;">hFirstObjectHandle</third>,
+									</li>
+									<li>
+										<first style="color: purple;">_In_</first> <second style="color: aqua;">HANDLE</second> <third style="color: grey;">hSecondObjectHandle</third>
+									</li>
+								</ul>
+							</p>
+							<p align="justify">
+								Objeleri temsil eden handle’ların duplicate edilmesini sağlar. Bu fonksiyon objeden objeye farklılık gösterebilir. Çünkü bildiğiniz üzere user objeleri yalnızca tek bir handle alabiliyorken, kernel objeleri birden fazla handle alabiliyordu. Bu fonksiyonun parametreleri hızlıca açıklanmak istenirse, sırayla:
+							</p>
+							<ul>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									Duplicat edilecek handle’ın hangi process’te olduğu, 
+								</li>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									Belirtilen process’teki hangi handle’ın duplicate edileceği, 
+								</li>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									Seçilen process’teki seçilen handle’ın hangi process için duplicate edeceği,
+								</li>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									Son olarak duplicate edilmiş handle’ı yerleştirmek için seçilen process’teki bir handle objesi
+								</li>
+							</ul>
+							<p align="justify">
+								Biliyorum, biraz karmaşık gelmiş olabilir. Aşağıdaki görselde bu fonksiyonun nasıl çalıştığı ifade edilmeye çalışılmıştır:
+							</p>
+							<iframe width="100%" height="300" src="https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Untitled%20Diagram%20(2).drawio#R7VpbU9s4FP41mdk%2BwNjyJcljLhQeujvM0Nlt92VH2MLWoFiu7JCkv34lW7It2alD6kBoIQNIR9LR5Xzf0dGBkbNYba8ZTOM%2FaYjICFjhduQsRwDYlmfxX0KyKyUesEtBxHAoO9WCO%2FwdqZFSusYhyrSOOaUkx6kuDGiSoCDXZJAxutG7PVCiz5rCCLUEdwEkbek%2FOMzjUjpR2xLyG4SjWM1sW7LlHgaPEaPrRM43Ao5VfJXNK6h0SUEWw5BuGiLnauQsGKV5WVptF4iIs1XHVo77uKe1WjdDSX7IgL%2FTWbgAs3%2Bv0fTJSb2bbzPoXkgtT5CskdpGsdh8pw6o2CISSuyRM9%2FEOEd3KQxE64ZDgsvifEVk8wNN8gUllBVjnY%2BW%2BHA5gfeIzKsTa3SRZ%2BbMs5zRR9QcXHwJpZiQrhHtE1DbQSxH24ZInsg1oiuUsx3vsq3MWQ6R6LWVtTY1FoAyadzAAXClEEr8RZXu2ga8IM3wDJOAfpOgJJwJ6PNaQhMunIcwiysbNexRG08cGNri%2FEuj%2FFWUL4Enq8tto225U5WE7%2BqL1FdUmsNEvR5X1NTAk2Bhr80zumYB6od6DlmE8v5%2BKNT8RhtBDYR4HQBRMoYIzPGT7m26QCNnuKWY76wCqGvpAHUcA3flvuWoJv1NRZ6uCEwMReXBtBRxoMFdo1sqOmT7Fwx8g1ETzS3xQqmxJkh1psdzxmlx5pbRAGV8zTMu%2F4%2F%2F4Ip9wm0zv2e8FInSDUxCQamiSzxr0Yz7kFynk45Lyb2me5IiSHCU8GrAUYq4fC48EuaXzkw2rHBYTN3pT3XS%2FgSNhnCQpjkdv%2BUg7S4HaeJ0MP%2Fo%2F%2BZXlued3ZU17qHf%2FAD6zd%2Fp12Fs3zo3%2Bk3ew5NjwpMzCSdazsOMAg4NJ8Z9igYKJ%2FzJK4QTdtezqHRfsa3c13KdEu5TclT6sT9UDz5j3anyeoQGj9%2FWNEcaVXwh4s0rflg4KV2h1fh2rXRbaLHuKQuFKxM9JKkKoIUhTiI5UPZVSs01pJ1TE5ygC4U0oaZ4EnmdmuK7Eh2lc5f%2Bu952erIZX2SqzyViX25zJC2n7J%2BLy5oIGnohFUo7NQlHeZEViRuhB7h7cPahudqWataxp8Y%2BB7v7M36ZF5RYenXtM%2BUX%2B%2FICWHuufMpv5AdS3FgxDw1QcmZhQPXqU15QeV8t5vM6Yj77VHGA3ZWneBYge%2BEozvwQRNpgDyJvZn8tP12J8HLRQF2p9hlg5KeB02xfuNjAKMzSMkX5gLcCOcVCZcoTuG%2FwrWFPbA131ROiGX4qiMV6mvRUuGu%2F9c8Yd8t33B31xp16Ou6s18ed28KdGQF%2B6DJiFsNUFGO0hREVF0uKGOZrEtGckt4qEeg3dmFjaVxbt7UthmeyfLI3zin9zdjX77lph91Bh91Pltqwvf73rjJxsGZkN2f8WEWCuc%2BOepKqsMgtzXCOBUiWBD0IHSpx8clorhIYKtXByrPYn%2BnYAxPr0uvAyUJ8foiTCg1HvIWfgQevHw9dcKiylsPjoZ1%2BvAxoiAaMYIfOXjWt%2FsrJZEs3J%2FDcljn9DnOeLJllH5LNCiN0J6uI3NPNVS2YFwLhxynD3%2FnZQiKEdf4rIDDLcKADgfuJp8pCRgosUa59UiAGsrxRN625L%2Fc1fm7uS1H2NHzv%2FZObDOnOJEfm%2BGbwMdFVHJojA2buyjUUDZQjc4Axz4vkyKa%2FJHXOiznnyggHXHpHcmJqvCinzotwAliuXPJJWQG6MsdvkBXW275QxmdFH88CRtgzPo48nmcosgxFA5HHcw3y2FbPun7Y%2F0RU60pAvn2qvTGm2ecVu7m%2BqyNxYlwvB1PN16lmT4wLbyiqjQ3qjH%2BKOrxa%2F0dp2b3%2Bt13n6n8%3D"></iframe>
+							<p align="justify">
+								Görselde de ifade edildiği gibi DuplicateHandle fonksiyonu _A process’inde execute edilerek _C adındaki handle’ını _B process’ine çoğaltıyor. _B process’inde önceden var olan veya yeni boş bir handle oluşturup o handle hedef olarak veriliyor. Böylece _C handle’ı _D handle’ı adı altında duplicate ediliyor. Ayrıca bir handle duplicate edilecekse, başka bir process’teki handle hedef olarak verilmek zorunda değil. DuplicateHandle fonksiyonuna hem source process hem de target process, current process’in handle’ı verilirse, tek bir process’te aynı objeye sahip iki farklı handle oluşturulabilir. 
+							</p>
+							<p align="justify">
+								Bu arada dikkat etmenizi istiyorum, DuplicateHandle fonksiyon parametresinde bir tek “_Outptr_ LPHANDLE lpTargetHandle” parametresinin tipi farklıdır. Diğer parametreler direkt olarak handle’ın kendisini alırken, bu parametre handle’ın bellekteki adresini alıyor.
+							</p>
+							<p align="justify">
+								Fonksiyonun diğer parametrelerine bakacak olursak: dwDesiredAccess, bInheritHandle ve dwOptions parametreleri vardır. Bunların mantığını hızlıca anlatmaya çalışırsak:
+							</p>
+							<ul>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									bInheritHandle: Duplicate edilen handle’ın process’ler arası inherit edilebilirliğini belirtiriz. Eğer “hTargetProcessHandle” parametresi NULL olarak belirtilirse, bu parametre görmezden gelinecektir. 
+								</li>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									dwOptions: Duplicate edildikten sonra source handle’ın kapatılıp kapatılmayacağını belirtiriz. Bu parametreye iki tür değer girilebilir: “DUPLICATE_CLOSE_SOURCE” (source handle’ı kapatır) ve “DUPLICATE_SAME_ACCESS” (source handle’ı kapatmaz).
+								</li>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									dwDesiredAccess: Bu parametre handle’ın temsil ettiği objenin türüne bağlı olarak değişebilen bir parametredir. Yani bu parametreye bir çok değer girilebilir. Eğer dwDesiredAccess’i kullanacaksak, uğraştığımız handle’ın tuttuğu objeye hakim olmanız gerekir. Parametrenin adından da anlaşılacağı gibi, duplicate edilmiş handle’a diğer handle’dan (source handle) farklı erişim yetkileri vermemizi sağlar. Aşağıda objelere göre gelebilecek örnek değerler listelenmiştir:
+									<p align="justify">
+										File Objesi’nin Handle’ı İçin: GENERIC_READ, GENERIC_WRITE, GENERIC_EXECUTE, DELETE, FILE_READ_ATTRIBUTES, FILE_WRITE_ATTRIBUTES, FILE_READ_DATA, FILE_WRITE_DATA
+									</p>
+									<p align="justify">
+										Registry Key Objesi’nin Handle’ı İçin: KEY_READ, KEY_WRITE, KEY_ALL_ACCESS
+									</p>
+								</li>
+							</ul>
+							<p align="justify">
+								Eğer “hTargetProcessHandle” parametresi NULL ise, bu parametre görmezden gelinecektir.
+							</p>
+							<li>
+								<code class="p_code" name="p_code">CloseHandle</code>
+							</li>
+							<p align="justify" style="margin: 0; padding: 0;">
+								<ul style="list-style: none;">
+									<li>
+										<first style="color: purple;">_In_ _Post_ptr_invalid_</first> <second style="color: aqua;">HANDLE</second> <third style="color: grey;">hObject</third>
+									</li>
+								</ul>
+							</p>
+							<p align="justify">
+								Handle’lar belleğin baş belası olduğunu biliyorsunuz, (aslında optimizasyon sistemleri sayesinde baş belası olmaktan çıktılar gibi) bu fonksiyon hObject parametresindeki belirtilen handle’ın bellek hücresini serbest bırakır ve handle’ı kapatır. Bu işlem yapıldıktan sonra artık belirtilen handle kullanılamaz.
+							</p>
+							<li>
+								<code class="p_code" name="p_code">GetHandleInformation</code>
+							</li>
+							<p align="justify" style="margin: 0; padding: 0;">
+								<ul style="list-style: none;">
+									<li>
+										<first style="color: purple;">_In_</first> <second style="color: aqua;">HANDLE</second> <third style="color: grey;">hObject</third>,
+									</li>
+									<li>
+										<first style="color: purple;">_Out_</first> <second style="color: aqua;">LPDWORD</second> <third style="color: grey;">lpdwFlags</third>
+									</li>
+								</ul>
+							</p>
+							<p align="justify">
+								Bu fonksiyon hedef handle için aşağıdaki “HANDLE_INFORMATION” yapısını kullanır. Bu yapı handle’ların pointer biçimindeki özelliklerini içerir. Bu özellikler, HANDLE_FLAG_INHERIT ve HANDLE_FLAG_PROTECT_FROM_CLOSE olarak adlandırılır. 
+							</p>
+							<p align="justify">
+								GetHandleInformation, bir handle ve bir HANDLE_INFORMATION yapısı alır. Fonksiyon, handle’ın özelliklerini HANDLE_INFORMATION yapısına yazar ve başarı durumunda TRUE değerini döndürür. Başarısızlık durumunda ise FALSE döndürür ve GetLastError kullanılarak hata kodu elde edilir.
+							</p>
+							<p align="justify" class="notes">
+								HANDLE_INFORMATION yapısı, bir handle hakkında bilgi taşıyan bir yapıdır. Bu yapı, bir handle’ın işaretçi biçimindeki özelliklerini tutar ve handle’ın içine dahil bir özellik değildir. Aşağıda HANDLE_INFORMATION yapısının C++ struct kodunu görebilirsiniz:
+
+								<!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #66d9ef">typedef</span> <span style="color: #66d9ef">struct</span> <span style="color: #f8f8f2">_HANDLE_INFORMATION</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">DWORD</span> <span style="color: #f8f8f2">dwFlags;</span>
+	<span style="color: #f8f8f2">HANDLE</span> <span style="color: #f8f8f2">handle;</span>
+<span style="color: #f8f8f2">}</span> <span style="color: #f8f8f2">HANDLE_INFORMATION,</span> <span style="color: #f92672">*</span> <span style="color: #f8f8f2">PHANDLE_INFORMATION;</span>
+</pre></div>
+							</p>
+							<p align="justify">
+								Aşağıda bu fonksiyon için örnek bir kod görebilirsiniz:
+							</p>
+							<!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #75715e">#include &lt;Windows.h&gt;</span>
+<span style="color: #75715e">#include &lt;stdio.h&gt;</span>
+<span style="color: #75715e">#include &lt;iostream&gt;</span>
+<span style="color: #66d9ef">int</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #f8f8f2">HANDLE</span> <span style="color: #f8f8f2">hFile</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">CreateFile(</span><span style="color: #e6db74">L&quot;C:</span><span style="color: #ae81ff">\\</span><span style="color: #e6db74">Users</span><span style="color: #ae81ff">\\</span><span style="color: #e6db74">adel</span><span style="color: #ae81ff">\\</span><span style="color: #e6db74">Desktop</span><span style="color: #ae81ff">\\</span><span style="color: #e6db74">example.txt&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">GENERIC_READ,</span> <span style="color: #f8f8f2">FILE_SHARE_READ,</span> <span style="color: #f8f8f2">NULL,</span> <span style="color: #f8f8f2">OPEN_EXISTING,</span> <span style="color: #f8f8f2">FILE_ATTRIBUTE_NORMAL,</span> <span style="color: #f8f8f2">NULL);</span>
+	<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(hFile</span> <span style="color: #f92672">==</span> <span style="color: #f8f8f2">INVALID_HANDLE_VALUE)</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">DWORD</span> <span style="color: #f8f8f2">dwError</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">GetLastError();</span>
+		<span style="color: #f8f8f2">LPSTR</span> <span style="color: #f8f8f2">messageBuffer</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">nullptr;</span>
+		<span style="color: #66d9ef">size_t</span> <span style="color: #f8f8f2">size</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER</span> <span style="color: #f92672">|</span> <span style="color: #f8f8f2">FORMAT_MESSAGE_FROM_SYSTEM</span> <span style="color: #f92672">|</span> <span style="color: #f8f8f2">FORMAT_MESSAGE_IGNORE_INSERTS,</span>
+			<span style="color: #f8f8f2">NULL,</span> <span style="color: #f8f8f2">dwError,</span> <span style="color: #f8f8f2">MAKELANGID(LANG_NEUTRAL,</span> <span style="color: #f8f8f2">SUBLANG_DEFAULT),</span> <span style="color: #f8f8f2">(LPSTR)</span><span style="color: #f92672">&amp;</span> <span style="color: #f8f8f2">messageBuffer,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">NULL);</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">string</span> <span style="color: #f8f8f2">message(messageBuffer,</span> <span style="color: #f8f8f2">size);</span>
+		<span style="color: #f8f8f2">LocalFree(messageBuffer);</span>
+		<span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">cout</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #e6db74">&quot;CreateFile failed with error: &quot;</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">message</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">std</span><span style="color: #f92672">::</span><span style="color: #f8f8f2">endl;</span>
+	<span style="color: #f8f8f2">}</span>
+	<span style="color: #66d9ef">else</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #f8f8f2">DWORD</span> <span style="color: #f8f8f2">dwFlags;</span>
+		<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(</span><span style="color: #f92672">!</span><span style="color: #f8f8f2">GetHandleInformation(hFile,</span> <span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">dwFlags))</span> <span style="color: #f8f8f2">{</span>
+			<span style="color: #f8f8f2">printf(</span><span style="color: #e6db74">&quot;Error: failed to get handle information</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">);</span>
+			<span style="color: #f8f8f2">CloseHandle(hFile);</span>
+			<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">;</span>
+		<span style="color: #f8f8f2">}</span>
+		<span style="color: #f8f8f2">printf(</span><span style="color: #e6db74">&quot;Handle information for example.txt:</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">);</span>
+		<span style="color: #f8f8f2">printf(</span><span style="color: #e6db74">&quot;    Handle flags: 0x%08x</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">dwFlags);</span>
+		<span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">(dwFlags</span> <span style="color: #f92672">&amp;</span> <span style="color: #f8f8f2">HANDLE_FLAG_INHERIT)</span> <span style="color: #f8f8f2">{</span>
+			<span style="color: #f8f8f2">printf(</span><span style="color: #e6db74">&quot;    Inheritable handle: yes</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">);</span>
+		<span style="color: #f8f8f2">}</span>
+		<span style="color: #66d9ef">else</span> <span style="color: #f8f8f2">{</span>
+			<span style="color: #f8f8f2">printf(</span><span style="color: #e6db74">&quot;    Inheritable handle: no</span><span style="color: #ae81ff">\n</span><span style="color: #e6db74">&quot;</span><span style="color: #f8f8f2">);</span>
+		<span style="color: #f8f8f2">}</span>
+		<span style="color: #f8f8f2">CloseHandle(hFile);</span>
+	<span style="color: #f8f8f2">}</span>
+	<span style="color: #66d9ef">return</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+							<p align="justify">
+								HANDLE_INFORMATION yapısına gelen değerleri öğrenmek için SetHandleInformation’a bakınız.
+							</p>
+							<li>
+								<code class="p_code" name="p_code">SetHandleInformation</code>
+							</li>
+							<p align="justify" style="margin: 0; padding: 0;">
+								<ul style="list-style: none;">
+									<li>
+										<first style="color: purple;">_In_</first> <second style="color: aqua;">HANDLE</second> <third style="color: grey;">hObject</third>,
+									</li>
+									<li>
+										<first style="color: purple;">_In_</first> <second style="color: aqua;">DWORD </second> <third style="color: grey;">dwMask</third>
+									</li>
+									<li>
+										<first style="color: purple;">_In_</first> <second style="color: aqua;">DWORD </second> <third style="color: grey;">dwFlags</third>
+									</li>
+								</ul>
+							</p>
+							<p align="justify">
+								SetHandleInformation fonksiyonu, bir handle’ın öznitelikleri değiştirmek için kullanılır. Bu fonksiyon, bir handle hakkında bilgi almak için kullanılan GetHandleInformation işlevi ile birlikte kullanılabilir.
+							</p>
+							<ul>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									hObject: özniteliklerinin değiştirileceği handle.
+								</li>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									dwMask: değiştirilecek özniteliklerin belirtildiği bit maskesiyle belirtilir.
+								</li>
+								<li style="background: url('..\\images\\list_arrow.png') 0 50% no-repeat; list-style-type: none;padding-left: 12px;">
+									dwFlags: ayarlanacak özniteliklerin değeriyle belirtilir.
+								</li>
+							</ul>
+							<p align="justify">
+								dwMask parametresi, değiştirilecek öznitelikleri belirtir. Örneğin, HANDLE_FLAG_INHERIT özniteliği değiştirilecekse, dwMask parametresine HANDLE_FLAG_INHERIT değeri atanır.
+							</p>
+							<p align="justify">
+								dwFlags parametresi, ayarlanacak özniteliklerin değerini belirtir. Örneğin, bir saplama(handle) için HANDLE_FLAG_INHERIT özniteliği kapatılmak isteniyorsa, dwFlags parametresine 0 değeri atanır.
+							</p>
+							<!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #75715e">// Handle&#39;ı inheritable yapmak</span>
+<span style="color: #f8f8f2">SetHandleInformation(hFile,</span> <span style="color: #f8f8f2">HANDLE_FLAG_INHERIT,</span> <span style="color: #f8f8f2">HANDLE_FLAG_INHERIT);</span>
+
+<span style="color: #75715e">// Handle&#39;ı uninheritable yapmak</span>
+<span style="color: #f8f8f2">SetHandleInformation(hFile,</span> <span style="color: #f8f8f2">HANDLE_FLAG_INHERIT,</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">);</span>
+
+<span style="color: #75715e">// Handle&#39;ı kapatılamaz hale getirmek: </span>
+<span style="color: #f8f8f2">SetHandleInformation(hFile,</span> <span style="color: #f8f8f2">HANDLE_FLAG_PROTECT_FROM_CLOSE,</span> <span style="color: #f8f8f2">HANDLE_FLAG_PROTECT_FROM_CLOSE);</span>
+
+<span style="color: #75715e">// Handle&#39;ı hem kapatılamaz hale getirip hem de inheritable yapmak:</span>
+<span style="color: #f8f8f2">SetHandleInformation(hFile,</span> <span style="color: #f8f8f2">HANDLE_FLAG_INHERIT</span> <span style="color: #f92672">|</span> <span style="color: #f8f8f2">HANDLE_FLAG_PROTECT_FROM_CLOSE,</span> <span style="color: #f8f8f2">HANDLE_FLAG_INHERIT</span> <span style="color: #f92672">|</span> <span style="color: #f8f8f2">HANDLE_FLAG_PROTECT_FROM_CLOSE);</span>
+</pre></div>
+							<p align="justify">
+								Bu arada dwMask ve dwFlags’e gelen değerler HANDLE_INFORMATION yapısından geliyor.
+							</p>
+							<li>
+								<code class="p_code" name="p_code">CompareObjectHandles</code>
+							</li>
+							<p align="justify" style="margin: 0; padding: 0;">
+								<ul style="list-style: none;">
+									<li>
+										<first style="color: purple;">_In_</first> <second style="color: aqua;">HANDLE</second> <third style="color: grey;">hFirstObjectHandle</third>,
+									</li>
+									<li>
+										<first style="color: purple;">_In_</first> <second style="color: aqua;">HANDLE</second> <third style="color: grey;">hSecondObjectHandle</third>
+									</li>
+								</ul>
+							</p>
+							<p align="justify">
+								Bu fonksiyon, iki handle'ın aynı nesneyi temsil edip etmediğini belirlemek için kullanılır. İki handle aynı nesneyi temsil ediyorsa, fonksiyon TRUE döndürür. Aksi takdirde, fonksiyon FALSE döndürür.
+							</p>
+							<p align="justify">
+								İki handle'ın aynı nesneyi temsil etmesi, aynı işlem tarafından açılmış iki handle'ın birbirine eşit olması anlamına gelir. 
+							</p>
+						</ul>
+					</p>
+					<p align="justify">
+						Fonksiyonlar hakkında daha fazla bilgi almak için: <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/handle-and-object-functions">https://learn.microsoft.com/en-us/windows/win32/sysinfo/handle-and-object-functions</a>
+					</p>
+				</div>
+			</div>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-HG8JQ59PYY"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-HG8JQ59PYY');
+	</script>
+	</body>
+</html>
