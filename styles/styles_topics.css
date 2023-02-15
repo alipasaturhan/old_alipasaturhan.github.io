@@ -6,6 +6,16 @@
 	font-family: Terminal-family; src: url('..\\fonts\\terminal.ttf');
 }
 
+.notes {
+	margin-left: 4%; 
+	border-style: solid; 
+	border-style: none; 
+	border-left-width: 2px;
+	border-left-style: solid; 
+	padding-left: 10px;
+	font-style: italic;
+}
+
 body {
 	background-color: #101010;
 	line-height: 1.65;
@@ -75,6 +85,7 @@ code{
 
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
   background: #101010;
 }
 
